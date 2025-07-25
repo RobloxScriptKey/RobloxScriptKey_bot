@@ -1,65 +1,19 @@
--- Ключ, зашифрованный ASCII
+-- RobloxScriptKey – Клоунско-лимонный интерфейс ввода ключа + загрузчик Luarmor
+
+-- Ключ "Lemon" в виде ASCII-кодов (для простоты)
 local keyData = {76, 101, 109, 111, 110} -- "Lemon"
 
 local function decodeKey(tbl)
-    local s = ""
+    local result = ""
     for _, v in ipairs(tbl) do
-        s = s .. string.char(v)
+        result = result .. string.char(v)
     end
-    return s
+    return result
 end
 
 local validKey = decodeKey(keyData)
 
--- Создаём GUI
-local gui = Instance.new("ScreenGui", game:GetService("CoreGui"))
-gui.Name = "KeySystem"
-
-local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 350, 0, 180)
-frame.Position = UDim2.new(0.5, -175, 0.5, -90)
-frame.BackgroundColor3 = Color3.fromRGB(50, 20, 70)
-frame.BorderSizePixel = 2
-frame.BorderColor3 = Color3.fromRGB(255, 215, 0)
-
-local label = Instance.new("TextLabel", frame)
-label.Text = "🍋 Enter your key"
-label.Size = UDim2.new(1, 0, 0, 30)
-label.BackgroundColor3 = Color3.fromRGB(100, 40, 140)
-label.TextColor3 = Color3.fromRGB(255, 255, 0)
-label.Font = Enum.Font.GothamBold
-label.TextSize = 22
-
-local box = Instance.new("TextBox", frame)
-box.PlaceholderText = "Enter the key you got from Telegram bot at http://t.me/RobloxScriptKey_bot"
-box.Size = UDim2.new(0.9, 0, 0, 40)
-box.Position = UDim2.new(0.05, 0, 0, 40)
-box.BackgroundColor3 = Color3.fromRGB(230, 230, 80)
-box.TextColor3 = Color3.fromRGB(40, 10, 70)
-box.Font = Enum.Font.Gotham
-box.TextSize = 18
-box.ClearTextOnFocus = false
-
-local button = Instance.new("TextButton", frame)
-button.Text = "✅ Submit"
-button.Size = UDim2.new(0.9, 0, 0, 40)
-button.Position = UDim2.new(0.05, 0, 0, 90)
-button.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
-button.TextColor3 = Color3.fromRGB(255, 255, 255)
-button.Font = Enum.Font.GothamBold
-button.TextSize = 20
-button.AutoButtonColor = true
-
-local feedback = Instance.new("TextLabel", frame)
-feedback.Size = UDim2.new(1, 0, 0, 30)
-feedback.Position = UDim2.new(0, 0, 1, -30)
-feedback.TextColor3 = Color3.fromRGB(255, 70, 70)
-feedback.BackgroundTransparency = 1
-feedback.Text = ""
-feedback.Font = Enum.Font.GothamItalic
-feedback.TextSize = 16
-
--- URL для Luarmor loader (зашифрован)
+-- URL загрузки Luarmor скрипта в ASCII
 local encryptedURL = {
     104,116,116,112,115,58,47,47,97,112,105,46,108,117,97,114,109,111,114,46,110,101,116,
     47,102,105,108,101,115,47,118,51,47,108,111,97,100,101,114,115,47,
@@ -75,106 +29,126 @@ local function decodeURL(tbl)
     return s
 end
 
--- Функция создания 3D лимона
-local function createLemon(position)
-    local lemonModel = Instance.new("Model")
-    lemonModel.Name = "Lemon"
+-- Создаем GUI
+local gui = Instance.new("ScreenGui", game:GetService("CoreGui"))
+gui.Name = "KeySystem"
 
-    -- Желтый овал (основа лимона)
-    local lemonBody = Instance.new("Part")
-    lemonBody.Size = Vector3.new(2, 3, 1)
-    lemonBody.Shape = Enum.PartType.Ball
-    lemonBody.Color = Color3.fromRGB(255, 255, 100)
-    lemonBody.Material = Enum.Material.SmoothPlastic
-    lemonBody.Anchored = true
-    lemonBody.CanCollide = false
-    lemonBody.Position = position
-    lemonBody.Parent = lemonModel
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 320, 0, 170)
+frame.Position = UDim2.new(0.5, -160, 0.5, -85)
+frame.BackgroundColor3 = Color3.fromRGB(255, 240, 140) -- лимонный желтый фон
+frame.BorderSizePixel = 4
+frame.BorderColor3 = Color3.fromRGB(255, 200, 0)
+frame.AnchorPoint = Vector2.new(0.5, 0.5)
+frame.ClipsDescendants = true
+frame.Rotation = 0
 
-    -- Листочек сверху
-    local leaf = Instance.new("Part")
-    leaf.Size = Vector3.new(0.5, 0.1, 1)
-    leaf.Shape = Enum.PartType.Block
-    leaf.Color = Color3.fromRGB(30, 150, 30)
-    leaf.Material = Enum.Material.SmoothPlastic
-    leaf.Anchored = true
-    leaf.CanCollide = false
-    leaf.CFrame = CFrame.new(position + Vector3.new(0, 1.5, 0)) * CFrame.Angles(0, math.rad(45), 0)
-    leaf.Parent = lemonModel
+-- Анимация лёгкого покачивания (клоунский стиль)
+spawn(function()
+    while frame.Parent do
+        for i = -5, 5, 0.5 do
+            frame.Rotation = i
+            wait(0.03)
+        end
+        for i = 5, -5, -0.5 do
+            frame.Rotation = i
+            wait(0.03)
+        end
+    end
+end)
 
-    lemonModel.Parent = workspace
-    return lemonModel, lemonBody
-end
+-- Заголовок с лимончиком
+local label = Instance.new("TextLabel", frame)
+label.Text = "🍋 Enter your key 🍋"
+label.Size = UDim2.new(1, 0, 0, 40)
+label.BackgroundColor3 = Color3.fromRGB(255, 230, 120)
+label.TextColor3 = Color3.fromRGB(90, 50, 0)
+label.Font = Enum.Font.FredokaOne
+label.TextSize = 26
+label.AnchorPoint = Vector2.new(0.5, 0)
+label.Position = UDim2.new(0.5, 0, 0, 0)
 
--- Анимация вращения и подпрыгивания
-local function animateLemon(part)
-    local runService = game:GetService("RunService")
-    local startTime = tick()
-    local initialPos = part.Position
+-- Инструкция ниже (телега и английский)
+local info = Instance.new("TextLabel", frame)
+info.Text = "Enter the key you got from Telegram bot:\nhttp://t.me/RobloxScriptKey_bot"
+info.Size = UDim2.new(1, -20, 0, 40)
+info.Position = UDim2.new(0, 10, 0, 45)
+info.BackgroundTransparency = 1
+info.TextColor3 = Color3.fromRGB(100, 60, 0)
+info.Font = Enum.Font.SourceSansItalic
+info.TextSize = 16
+info.TextWrapped = true
 
-    local connection
-    connection = runService.Heartbeat:Connect(function()
-        local elapsed = tick() - startTime
+-- Поле ввода
+local box = Instance.new("TextBox", frame)
+box.PlaceholderText = "Type your key here..."
+box.Size = UDim2.new(0.9, 0, 0, 40)
+box.Position = UDim2.new(0.05, 0, 0, 90)
+box.BackgroundColor3 = Color3.fromRGB(255, 250, 180)
+box.TextColor3 = Color3.fromRGB(80, 40, 0)
+box.Font = Enum.Font.FredokaOne
+box.TextSize = 20
+box.ClearTextOnFocus = false
+box.Text = ""
 
-        -- Вращение вокруг оси Y
-        part.CFrame = CFrame.new(initialPos) * CFrame.Angles(0, elapsed * math.rad(90), 0)
+-- Кнопка Submit
+local button = Instance.new("TextButton", frame)
+button.Text = "🍋 Submit 🍋"
+button.Size = UDim2.new(0.9, 0, 0, 40)
+button.Position = UDim2.new(0.05, 0, 0, 135)
+button.BackgroundColor3 = Color3.fromRGB(255, 200, 20)
+button.TextColor3 = Color3.fromRGB(90, 50, 0)
+button.Font = Enum.Font.FredokaOne
+button.TextSize = 22
+button.AutoButtonColor = true
 
-        -- Плавное подпрыгивание
-        local bounce = math.sin(elapsed * 3) * 0.2
-        part.Position = initialPos + Vector3.new(0, bounce, 0)
+-- Обратная связь
+local feedback = Instance.new("TextLabel", frame)
+feedback.Size = UDim2.new(1, 0, 0, 20)
+feedback.Position = UDim2.new(0, 0, 1, -20)
+feedback.TextColor3 = Color3.fromRGB(200, 0, 0)
+feedback.BackgroundTransparency = 1
+feedback.Text = ""
+feedback.Font = Enum.Font.SourceSansItalic
+feedback.TextSize = 16
+feedback.TextWrapped = true
+feedback.TextStrokeTransparency = 0.7
+
+-- Функция запуска внешнего скрипта
+local function loadExternalScript()
+    local url = decodeURL(encryptedURL)
+    print("🍋 Loading script from:", url)
+
+    local success, result = pcall(function()
+        return game:HttpGet(url)
     end)
-    return connection
+
+    if success then
+        local func, err = loadstring(result)
+        if func then
+            func()
+            print("🍋 Script executed successfully!")
+        else
+            warn("❌ Script compile error:", err)
+            feedback.Text = "Script error! Check Output."
+        end
+    else
+        warn("❌ Failed to load script:", result)
+        feedback.Text = "Failed to load script! Check Output."
+    end
 end
 
--- Основная логика кнопки
+-- Обработка кнопки Submit
 button.MouseButton1Click:Connect(function()
-    local input = box.Text:match("^%s*(.-)%s*$") -- trim
+    local input = box.Text:match("^%s*(.-)%s*$") -- trim spaces
 
     if input == validKey then
         feedback.Text = ""
-        gui:Destroy()
+        gui:Destroy() -- скрываем интерфейс
 
-        -- Создаём лимон перед игроком
-        local player = game.Players.LocalPlayer
-        local character = player.Character or player.CharacterAdded:Wait()
-        local rootPart = character:WaitForChild("HumanoidRootPart")
-
-        local lemonPos = rootPart.Position + rootPart.CFrame.LookVector * 5 + Vector3.new(0, 3, 0)
-        local lemonModel, lemonBody = createLemon(lemonPos)
-
-        -- Запускаем анимацию лимона
-        local animConnection = animateLemon(lemonBody)
-
-        -- Через 10 секунд останавливаем анимацию и удаляем лимон с плавным затуханием
-        delay(10, function()
-            animConnection:Disconnect()
-            for i = 1, 20 do
-                lemonBody.Transparency = i / 20
-                wait(0.05)
-            end
-            lemonModel:Destroy()
-        end)
-
-        -- Загружаем Luarmor loader
-        local url = decodeURL(encryptedURL)
-        print("✅ Loading script from:", url)
-
-        local success, result = pcall(function()
-            return game:HttpGet(url)
-        end)
-
-        if success then
-            local func, err = loadstring(result)
-            if func then
-                func()
-            else
-                warn("❌ Script compile error:", err)
-            end
-        else
-            warn("❌ Failed to load script:", result)
-        end
+        loadExternalScript()
     else
-        feedback.Text = "❌ Invalid Key"
+        feedback.Text = "❌ Invalid Key!"
         wait(2)
         feedback.Text = ""
     end
