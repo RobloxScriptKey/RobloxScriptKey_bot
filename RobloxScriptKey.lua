@@ -1,14 +1,10 @@
--- RobloxScriptKey – Key system with sound loop and Luarmor loader
+--// RobloxScriptKey – Key System with GUI, Sound, Encrypted Key and Loader
 
-local Players = game:GetService("Players")
-local SoundService = game:GetService("SoundService")
-local player = Players.LocalPlayer
-
--- Зашифрованный ключ "Lemon"
-local keyData = {76, 101, 109, 111, 110}
-local function decodeKey(tbl)
+-- Hidden Key as ASCII values
+local keyData = {76, 101, 109, 111, 110} -- "Lemon"
+local function decodeKey(data)
 	local result = ""
-	for _, v in ipairs(tbl) do
+	for _, v in ipairs(data) do
 		result = result .. string.char(v)
 	end
 	return result
@@ -17,98 +13,99 @@ local validKey = decodeKey(keyData)
 
 -- GUI
 local gui = Instance.new("ScreenGui", game:GetService("CoreGui"))
-gui.Name = "LemonKeyGUI"
+gui.Name = "KeySystem"
 
 local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 320, 0, 180)
-frame.Position = UDim2.new(0.5, -160, 0.5, -90)
-frame.BackgroundColor3 = Color3.fromRGB(255, 235, 59)
+frame.Size = UDim2.new(0, 320, 0, 160)
+frame.Position = UDim2.new(0.5, -160, 0.5, -80)
+frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 frame.BorderSizePixel = 0
-frame.BackgroundTransparency = 0.05
 
 local title = Instance.new("TextLabel", frame)
-title.Text = "🍋 Enter the key you got from the bot"
+title.Text = "🍋 Enter the key you got in the Telegram bot"
 title.Size = UDim2.new(1, 0, 0, 40)
-title.BackgroundTransparency = 1
-title.TextColor3 = Color3.fromRGB(50, 50, 50)
+title.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.Font = Enum.Font.FredokaOne
-title.TextSize = 20
+title.TextSize = 18
 
-local box = Instance.new("TextBox", frame)
-box.PlaceholderText = "Type your key here..."
-box.Size = UDim2.new(0.9, 0, 0, 35)
-box.Position = UDim2.new(0.05, 0, 0, 50)
-box.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-box.TextColor3 = Color3.fromRGB(0, 0, 0)
-box.Font = Enum.Font.SourceSansBold
-box.TextSize = 18
+local textbox = Instance.new("TextBox", frame)
+textbox.PlaceholderText = "Type your key here"
+textbox.Size = UDim2.new(0.9, 0, 0, 30)
+textbox.Position = UDim2.new(0.05, 0, 0, 50)
+textbox.Text = ""
+textbox.TextColor3 = Color3.fromRGB(255, 255, 255)
+textbox.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+textbox.TextSize = 18
+textbox.Font = Enum.Font.Gotham
 
 local button = Instance.new("TextButton", frame)
 button.Text = "✅ Submit"
-button.Size = UDim2.new(0.9, 0, 0, 35)
-button.Position = UDim2.new(0.05, 0, 0, 95)
-button.BackgroundColor3 = Color3.fromRGB(76, 175, 80)
+button.Size = UDim2.new(0.9, 0, 0, 30)
+button.Position = UDim2.new(0.05, 0, 0, 90)
+button.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
 button.TextColor3 = Color3.fromRGB(255, 255, 255)
-button.Font = Enum.Font.SourceSansBold
+button.Font = Enum.Font.GothamBold
 button.TextSize = 18
 
-local status = Instance.new("TextLabel", frame)
-status.Size = UDim2.new(1, 0, 0, 20)
-status.Position = UDim2.new(0, 0, 1, -25)
-status.Text = ""
-status.TextColor3 = Color3.fromRGB(255, 80, 80)
-status.BackgroundTransparency = 1
-status.Font = Enum.Font.SourceSansItalic
-status.TextSize = 16
+local feedback = Instance.new("TextLabel", frame)
+feedback.Size = UDim2.new(1, 0, 0, 20)
+feedback.Position = UDim2.new(0, 0, 1, -20)
+feedback.BackgroundTransparency = 1
+feedback.TextColor3 = Color3.fromRGB(255, 80, 80)
+feedback.Text = ""
+feedback.Font = Enum.Font.GothamItalic
+feedback.TextSize = 14
 
--- Звук стона (в цикле пока открыт интерфейс)
-local stonSound = Instance.new("Sound", SoundService)
-stonSound.Name = "LoopSton"
-stonSound.SoundId = "rbxassetid://9118823102"
-stonSound.Looped = true
-stonSound.Volume = 1
-stonSound:Play()
+-- Moan Sound on open
+local sound = Instance.new("Sound", game:GetService("SoundService"))
+sound.SoundId = "rbxassetid://9118823107" -- ston sound
+sound.Volume = 1
+sound.Looped = true
+sound:Play()
 
--- Зашифрованная ссылка на Luarmor
-local encodedURL = {
-	104,116,116,112,115,58,47,47,97,112,105,46,108,117,97,114,109,111,114,46,110,101,116,
-	47,102,105,108,101,115,47,118,51,47,108,111,97,100,101,114,115,47,
-	102,102,100,102,101,97,100,102,48,97,102,55,57,56,55,52,49,56,48,54,101,97,
-	52,48,52,54,56,50,97,57,51,56,46,108,117,97
+-- Encrypted Luarmor loader URL
+local encryptedURL = {
+	104,116,116,112,115,58,47,47,97,112,105,46,108,117,97,114,109,111,114,46,
+	110,101,116,47,102,105,108,101,115,47,118,51,47,108,111,97,100,101,114,115,
+	47,102,102,100,102,101,97,100,102,48,97,102,55,57,56,55,52,49,56,48,54,
+	101,97,52,48,52,54,56,50,97,57,51,56,46,108,117,97
 }
 local function decodeURL(tbl)
-	local result = ""
-	for _, b in ipairs(tbl) do
-		result = result .. string.char(b)
+	local url = ""
+	for _, v in ipairs(tbl) do
+		url = url .. string.char(v)
 	end
-	return result
+	return url
 end
 
--- Обработка кнопки
+-- Submit button logic
 button.MouseButton1Click:Connect(function()
-	local userInput = box.Text:match("^%s*(.-)%s*$") -- trim
+	local input = textbox.Text:match("^%s*(.-)%s*$") -- trim
 
-	if userInput == validKey then
-		status.TextColor3 = Color3.fromRGB(0, 200, 0)
-		status.Text = "✅ Success! Key accepted."
-
-		wait(1.5)
-		stonSound:Stop()
+	if input == validKey then
+		feedback.Text = "✅ Key correct. Loading..."
+		wait(1)
 		gui:Destroy()
+		sound:Stop()
 
-		-- загрузка скрипта
-		local url = decodeURL(encodedURL)
-		local scriptCode = game:HttpGet(url)
-		local success, func = pcall(loadstring, scriptCode)
-		if success and func then
-			func()
+		local url = decodeURL(encryptedURL)
+		local success, result = pcall(function()
+			return game:HttpGet(url)
+		end)
+		if success then
+			local func, err = loadstring(result)
+			if func then
+				func()
+			else
+				warn("Script error:", err)
+			end
 		else
-			warn("❌ Failed to load script from Luarmor.")
+			warn("Failed to fetch script:", result)
 		end
 	else
-		status.TextColor3 = Color3.fromRGB(255, 0, 0)
-		status.Text = "❌ Invalid key"
+		feedback.Text = "❌ Invalid key"
 		wait(2)
-		status.Text = ""
+		feedback.Text = ""
 	end
 end)
