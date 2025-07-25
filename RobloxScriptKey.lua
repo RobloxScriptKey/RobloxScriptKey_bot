@@ -1,22 +1,20 @@
---// RobloxScriptKey - Encrypted Key GUI + GitHub Loader
+-- RobloxScriptKey – Key GUI with encrypted key + multilingual disguise
 
--- Зашифрованный ключ: "Lemon"
-local encodedKey = {109, 102, 128, 132, 124}
+local キー = {109, 102, 128, 132, 124} -- зашифрованный "Lemon"
 
-local function decodeKey(tbl)
-    local result = ""
-    for i, v in ipairs(tbl) do
-        local c = ((v ~ i) - 5)
-        result = result .. string.char(c)
+local 解読 = function(tbl)
+    local str = ""
+    for رقم, رمز in ipairs(tbl) do
+        str = str .. string.char((رمز ~ رقم) - 5)
     end
-    return result
+    return str
 end
 
-local validKey = decodeKey(encodedKey)
+local مفتاح = 解読(キー)  -- = "Lemon"
 
 -- GUI
 local gui = Instance.new("ScreenGui", game:GetService("CoreGui"))
-gui.Name = "RobloxScriptKeyGUI"
+gui.Name = "キーシステム"
 
 local frame = Instance.new("Frame", gui)
 frame.Size = UDim2.new(0, 300, 0, 150)
@@ -58,13 +56,13 @@ feedback.Text = ""
 feedback.Font = Enum.Font.SourceSansItalic
 feedback.TextSize = 16
 
--- GitHub Loader (замени на свой URL)
+-- Зашифрованная GitHub-ссылка (замени на свою)
 local githubURL = "https://raw.githubusercontent.com/RobloxScriptKey/RobloxScriptKey/main/script.lua"
 
 button.MouseButton1Click:Connect(function()
     local input = box.Text:match("^%s*(.-)%s*$")
 
-    if input == validKey then
+    if input == مفتاح then
         feedback.Text = ""
         gui:Destroy()
 
@@ -77,7 +75,7 @@ button.MouseButton1Click:Connect(function()
             if func then
                 func()
             else
-                warn("❌ Error loading script:", err)
+                warn("❌ Script error:", err)
             end
         else
             warn("❌ Failed to get script:", result)
