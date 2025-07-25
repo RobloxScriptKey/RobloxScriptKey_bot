@@ -12,7 +12,7 @@ soundFail.SoundId = "rbxassetid://911882698" -- звук "вэ-вэ-вэ" (buzze
 soundFail.Volume = 0.7
 soundFail.Parent = player:WaitForChild("PlayerGui")
 
--- Создаем GUI
+-- GUI
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "LemonKeyGui"
 screenGui.Parent = player:WaitForChild("PlayerGui")
@@ -20,7 +20,7 @@ screenGui.Parent = player:WaitForChild("PlayerGui")
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 360, 0, 160)
 frame.Position = UDim2.new(0.5, -180, 0.5, -80)
-frame.BackgroundColor3 = Color3.fromRGB(255, 242, 90) -- яркий лимонный цвет
+frame.BackgroundColor3 = Color3.fromRGB(255, 242, 90)
 frame.BorderSizePixel = 0
 frame.Parent = screenGui
 frame.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -28,7 +28,6 @@ frame.BackgroundTransparency = 0.1
 frame.ClipsDescendants = true
 frame.AutoLocalize = false
 
--- Тень под рамкой (для красоты)
 local shadow = Instance.new("Frame")
 shadow.Size = UDim2.new(1, 8, 1, 8)
 shadow.Position = UDim2.new(0, -4, 0, -4)
@@ -37,7 +36,6 @@ shadow.BorderSizePixel = 0
 shadow.ZIndex = 0
 shadow.Parent = frame
 
--- Заголовок
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, 0, 0, 40)
 title.BackgroundTransparency = 1
@@ -47,7 +45,6 @@ title.TextColor3 = Color3.fromRGB(40, 40, 40)
 title.TextSize = 28
 title.Parent = frame
 
--- Поле ввода ключа
 local textbox = Instance.new("TextBox")
 textbox.Size = UDim2.new(0.85, 0, 0, 35)
 textbox.Position = UDim2.new(0.075, 0, 0, 55)
@@ -61,7 +58,6 @@ textbox.ClearTextOnFocus = false
 textbox.Parent = frame
 textbox.Text = ""
 
--- Кнопка Submit
 local submitBtn = Instance.new("TextButton")
 submitBtn.Size = UDim2.new(0.85, 0, 0, 40)
 submitBtn.Position = UDim2.new(0.075, 0, 0, 100)
@@ -73,7 +69,6 @@ submitBtn.TextColor3 = Color3.fromRGB(20, 20, 20)
 submitBtn.Text = "Submit"
 submitBtn.Parent = frame
 
--- Текст обратной связи
 local feedback = Instance.new("TextLabel")
 feedback.Size = UDim2.new(1, 0, 0, 20)
 feedback.Position = UDim2.new(0, 0, 1, -22)
@@ -84,10 +79,8 @@ feedback.TextSize = 18
 feedback.Text = ""
 feedback.Parent = frame
 
--- Лимонный ключ
 local VALID_KEY = "Lemon"
 
--- Эффект на кнопку при наведении и нажатии
 submitBtn.MouseEnter:Connect(function()
 	submitBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 100)
 end)
@@ -109,12 +102,11 @@ submitBtn.MouseButton1Click:Connect(function()
 		soundSuccess:Play()
 		wait(1)
 		screenGui:Destroy()
-		
-		-- Запускаем внешний скрипт через loadstring
+
 		local success, result = pcall(function()
 			return game:HttpGet("https://api.luarmor.net/files/v3/loaders/ffdfeadf0af798741806ea404682a938.lua")
 		end)
-		
+
 		if success and result then
 			local func, err = loadstring(result)
 			if func then
@@ -128,7 +120,9 @@ submitBtn.MouseButton1Click:Connect(function()
 	else
 		feedback.TextColor3 = Color3.fromRGB(150, 0, 0)
 		feedback.Text = "❌ Invalid key, try again!"
-		soundFail:Play()
+		if not soundFail.IsPlaying then
+			soundFail:Play()
+		end
 		wait(2)
 		feedback.Text = ""
 	end
