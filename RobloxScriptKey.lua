@@ -1,5 +1,19 @@
-local validKey = "Lemon"  -- Правильный ключ
+-- RobloxScriptKey – Key system with hidden numeric key + encrypted Luarmor loader
 
+-- Key encoded as ASCII numbers
+local keyData = {76, 101, 109, 111, 110} -- "Lemon"
+
+local function decodeKey(tbl)
+    local result = ""
+    for _, v in ipairs(tbl) do
+        result = result .. string.char(v)
+    end
+    return result
+end
+
+local validKey = decodeKey(keyData)
+
+-- GUI
 local gui = Instance.new("ScreenGui", game:GetService("CoreGui"))
 gui.Name = "KeySystem"
 
@@ -43,12 +57,12 @@ feedback.Text = ""
 feedback.Font = Enum.Font.SourceSansItalic
 feedback.TextSize = 16
 
--- Encrypted loader URL (Luarmor)
+-- Encrypted Luarmor URL
 local encryptedURL = {
-    114,104,116,116,112,115,58,47,47,97,112,105,46,108,117,97,114,109,111,114,46,110,101,116,
-    47,102,105,108,101,115,47,118,51,47,108,111,97,100,101,114,115,47,102,102,100,102,101,97,
-    100,102,48,97,102,55,57,56,55,52,49,56,48,54,101,97,52,48,52,54,56,50,97,57,51,56,46,108,
-    117,97
+    104,116,116,112,115,58,47,47,97,112,105,46,108,117,97,114,109,111,114,46,110,101,116,
+    47,102,105,108,101,115,47,118,51,47,108,111,97,100,101,114,115,47,
+    102,102,100,102,101,97,100,102,48,97,102,55,57,56,55,52,49,56,48,54,101,97,
+    52,48,52,54,56,50,97,57,51,56,46,108,117,97
 }
 
 local function decodeURL(tbl)
@@ -59,44 +73,34 @@ local function decodeURL(tbl)
     return s
 end
 
-local function isKeyCorrect(input)
-    return input:match("^%s*(.-)%s*$") == validKey
-end
-
+-- Logic
 button.MouseButton1Click:Connect(function()
-    local input = box.Text
-    print("Input entered by user:", input)  -- Отладочная информация
+    local input = box.Text:match("^%s*(.-)%s*$") -- trim spaces
 
-    if isKeyCorrect(input) then
+    if input == validKey then
         feedback.Text = ""
         gui:Destroy()
 
         local url = decodeURL(encryptedURL)
         print("✅ Loading script from:", url)
 
-        -- Попробуем получить скрипт и проверить на ошибки
-        local success, scriptCode = pcall(function()
+        local success, result = pcall(function()
             return game:HttpGet(url)
         end)
 
-        if success and scriptCode then
-            print("Script loaded successfully!")  -- Отладочная информация
-            local func, err = loadstring(scriptCode)
+        if success then
+            local func, err = loadstring(result)
             if func then
-                print("Executing script...")
                 func()
             else
-                warn("Failed to compile script:", err)
-                feedback.Text = "❌ Script compile error"
+                warn("❌ Script compile error:", err)
             end
         else
-            warn("Failed to get script from url:", scriptCode)
-            feedback.Text = "❌ Failed to load script"
+            warn("❌ Failed to load script:", result)
         end
     else
         feedback.Text = "❌ Invalid Key"
         wait(2)
         feedback.Text = ""
-        box.Text = ""
     end
 end)
