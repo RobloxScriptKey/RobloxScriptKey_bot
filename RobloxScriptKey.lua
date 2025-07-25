@@ -1,7 +1,10 @@
--- 🤡 RobloxScriptKey – Clown Key System with hidden key + encrypted Luarmor loader
+-- 🤡 RobloxScriptKey – Animated Clown Key GUI with Encrypted Loader
 
--- Key encoded as ASCII numbers
-local keyData = {76, 101, 109, 111, 110} -- "Lemon"
+local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui")
+
+-- Encrypted key (Lemon)
+local keyData = {76, 101, 109, 111, 110}
 local function decodeKey(tbl)
     local result = ""
     for _, v in ipairs(tbl) do
@@ -11,53 +14,7 @@ local function decodeKey(tbl)
 end
 local validKey = decodeKey(keyData)
 
--- GUI
-local gui = Instance.new("ScreenGui", game:GetService("CoreGui"))
-gui.Name = "ClownKeySystem"
-
-local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 360, 0, 200)
-frame.Position = UDim2.new(0.5, -180, 0.5, -100)
-frame.BackgroundColor3 = Color3.fromRGB(255, 204, 0)
-frame.BorderSizePixel = 5
-frame.BorderColor3 = Color3.fromRGB(255, 0, 0)
-
-local label = Instance.new("TextLabel", frame)
-label.Text = "🎪 Enter the magic clown key:"
-label.Size = UDim2.new(1, 0, 0, 40)
-label.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-label.TextColor3 = Color3.fromRGB(0, 0, 255)
-label.Font = Enum.Font.Arcade
-label.TextSize = 22
-
-local box = Instance.new("TextBox", frame)
-box.PlaceholderText = "🤡 Type your key here"
-box.Size = UDim2.new(0.9, 0, 0, 35)
-box.Position = UDim2.new(0.05, 0, 0, 50)
-box.BackgroundColor3 = Color3.fromRGB(255, 230, 230)
-box.TextColor3 = Color3.fromRGB(0, 0, 0)
-box.Font = Enum.Font.SciFi
-box.TextSize = 20
-
-local button = Instance.new("TextButton", frame)
-button.Text = "🎉 Let Me In!"
-button.Size = UDim2.new(0.9, 0, 0, 35)
-button.Position = UDim2.new(0.05, 0, 0, 95)
-button.BackgroundColor3 = Color3.fromRGB(0, 255, 127)
-button.TextColor3 = Color3.fromRGB(0, 0, 0)
-button.Font = Enum.Font.GothamBold
-button.TextSize = 22
-
-local feedback = Instance.new("TextLabel", frame)
-feedback.Size = UDim2.new(1, 0, 0, 20)
-feedback.Position = UDim2.new(0, 0, 1, -20)
-feedback.BackgroundTransparency = 1
-feedback.TextColor3 = Color3.fromRGB(255, 0, 0)
-feedback.Font = Enum.Font.SourceSansItalic
-feedback.TextSize = 16
-feedback.Text = ""
-
--- 🔒 Encrypted loader URL (Luarmor)
+-- Encrypted Luarmor URL
 local encryptedURL = {
     104,116,116,112,115,58,47,47,97,112,105,46,108,117,97,114,109,111,114,46,110,101,116,
     47,102,105,108,101,115,47,118,51,47,108,111,97,100,101,114,115,47,
@@ -72,36 +29,95 @@ local function decodeURL(tbl)
     return s
 end
 
+-- GUI Setup
+local gui = Instance.new("ScreenGui", CoreGui)
+gui.Name = "KeySystem"
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 400, 0, 300)
+frame.Position = UDim2.new(0.5, -200, 0.5, -150)
+frame.BackgroundColor3 = Color3.fromRGB(255, 235, 59)
+frame.BorderSizePixel = 6
+frame.BorderColor3 = Color3.fromRGB(255, 0, 0)
+frame.Parent = gui
+
+-- Clown image
+local clown = Instance.new("ImageLabel")
+clown.Size = UDim2.new(0, 150, 0, 150)
+clown.Position = UDim2.new(0.5, -75, 0, 10)
+clown.BackgroundTransparency = 1
+clown.Image = "rbxassetid://14073080557" -- Funny clown image
+clown.Parent = frame
+
+-- Animate clown
+local tweenInfo = TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
+local tween = TweenService:Create(clown, tweenInfo, {Position = clown.Position + UDim2.new(0, 0, 0, 10)})
+tween:Play()
+
+-- Input box
+local box = Instance.new("TextBox")
+box.Size = UDim2.new(0.8, 0, 0, 35)
+box.Position = UDim2.new(0.1, 0, 0, 170)
+box.PlaceholderText = "Enter the clown key 🎈"
+box.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+box.TextColor3 = Color3.fromRGB(0, 0, 0)
+box.TextSize = 18
+box.Font = Enum.Font.Gotham
+box.Parent = frame
+
+-- Submit button
+local button = Instance.new("TextButton")
+button.Size = UDim2.new(0.8, 0, 0, 35)
+button.Position = UDim2.new(0.1, 0, 0, 215)
+button.Text = "🎪 Unlock Show!"
+button.BackgroundColor3 = Color3.fromRGB(0, 200, 83)
+button.TextColor3 = Color3.fromRGB(255, 255, 255)
+button.TextSize = 20
+button.Font = Enum.Font.GothamBold
+button.Parent = frame
+
+-- Feedback label
+local feedback = Instance.new("TextLabel")
+feedback.Size = UDim2.new(1, 0, 0, 20)
+feedback.Position = UDim2.new(0, 0, 1, -22)
+feedback.TextColor3 = Color3.fromRGB(255, 0, 0)
+feedback.BackgroundTransparency = 1
+feedback.Text = ""
+feedback.TextSize = 16
+feedback.Font = Enum.Font.SourceSansItalic
+feedback.Parent = frame
+
 -- Logic
 button.MouseButton1Click:Connect(function()
-    local input = box.Text:match("^%s*(.-)%s*$") -- trim spaces
-
+    local input = box.Text:match("^%s*(.-)%s*$")
     if input == validKey then
-        feedback.Text = "🎊 Correct key! Launching..."
+        feedback.Text = "🎉 Welcome to the circus!"
         wait(1)
         gui:Destroy()
-
         local url = decodeURL(encryptedURL)
-        print("✅ Loading script from:", url)
-
         local success, result = pcall(function()
             return game:HttpGet(url)
         end)
-
         if success then
             local func, err = loadstring(result)
             if func then
                 func()
             else
-                warn("❌ Script compile error:", err)
+                warn("Script error:", err)
             end
         else
-            warn("❌ Failed to load script:", result)
+            warn("Load error:", result)
         end
     else
-        feedback.Text = "❌ Wrong key, clown!"
-        wait(2)
+        feedback.Text = "🤡 Wrong key, try again!"
+        -- shake effect
+        for i = 1, 3 do
+            frame.Position = frame.Position + UDim2.new(0, 10, 0, 0)
+            wait(0.05)
+            frame.Position = frame.Position - UDim2.new(0, 20, 0, 0)
+            wait(0.05)
+            frame.Position = frame.Position + UDim2.new(0, 10, 0, 0)
+        end
         feedback.Text = ""
-        box.Text = ""
     end
 end)
