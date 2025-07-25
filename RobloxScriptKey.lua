@@ -1,4 +1,4 @@
-local validKey = "Lemon"
+local validKey = "Lemon"  -- Правильный ключ
 
 local gui = Instance.new("ScreenGui", game:GetService("CoreGui"))
 gui.Name = "KeySystem"
@@ -65,17 +65,25 @@ end
 
 button.MouseButton1Click:Connect(function()
     local input = box.Text
+    print("Input entered by user:", input)  -- Отладочная информация
+
     if isKeyCorrect(input) then
+        feedback.Text = ""
         gui:Destroy()
+
         local url = decodeURL(encryptedURL)
         print("✅ Loading script from:", url)
+
+        -- Попробуем получить скрипт и проверить на ошибки
         local success, scriptCode = pcall(function()
             return game:HttpGet(url)
         end)
 
         if success and scriptCode then
+            print("Script loaded successfully!")  -- Отладочная информация
             local func, err = loadstring(scriptCode)
             if func then
+                print("Executing script...")
                 func()
             else
                 warn("Failed to compile script:", err)
