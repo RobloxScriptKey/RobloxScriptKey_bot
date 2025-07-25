@@ -1,21 +1,22 @@
+--// 🤡 Public Key System by RobloxScriptKey
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- Шифрованный ключ "Lemon"
+-- Зашифрованный ключ "Lemon"
 local encrypted = {109, 102, 128, 132, 124}
-local decode = function(tbl)
-    local str = ""
-    for i, v in ipairs(tbl) do
-        str = str .. string.char((v ~ i) - 5)
-    end
-    return str
+local function decode(tbl)
+	local s = ""
+	for i, v in ipairs(tbl) do
+		s = s .. string.char((v ~ i) - 5)
+	end
+	return s
 end
-local hiddenKey = decode(encrypted) -- = "Lemon"
+local key = decode(encrypted)
 
 -- Clown-style GUI 🎪
 local gui = Instance.new("ScreenGui", playerGui)
-gui.Name = "🤡ClownKeyUI"
+gui.Name = "ClownKeyGUI"
 
 local frame = Instance.new("Frame", gui)
 frame.Size = UDim2.new(0, 350, 0, 180)
@@ -59,30 +60,27 @@ msg.Font = Enum.Font.SourceSansItalic
 msg.TextSize = 16
 msg.Text = ""
 
--- Твой скрипт с GitHub
+-- GitHub script
 local githubURL = "https://raw.githubusercontent.com/RobloxScriptKey/RobloxScriptKey/main/script.lua"
 
 button.MouseButton1Click:Connect(function()
-    local input = box.Text:match("^%s*(.-)%s*$")
-
-    if input == hiddenKey then
-        msg.Text = "🎊 Correct! Launching..."
-        gui:Destroy()
-
-        local success, response = pcall(function()
-            return game:HttpGet(githubURL)
-        end)
-
-        if success then
-            local func = loadstring(response)
-            if func then func() end
-        else
-            warn("💥 Failed to load script:", response)
-        end
-    else
-        msg.Text = "🤡 Wrong key, silly!"
-        wait(2)
-        msg.Text = ""
-        box.Text = ""
-    end
+	local input = box.Text:match("^%s*(.-)%s*$")
+	if input == key then
+		msg.Text = "🎊 Correct! Launching..."
+		gui:Destroy()
+		local success, response = pcall(function()
+			return game:HttpGet(githubURL)
+		end)
+		if success then
+			local func, err = loadstring(response)
+			if func then func() else warn("❌ Script error:", err) end
+		else
+			warn("❌ Failed to load:", response)
+		end
+	else
+		msg.Text = "❌ Wrong key, silly clown!"
+		wait(2)
+		msg.Text = ""
+		box.Text = ""
+	end
 end)
