@@ -1,7 +1,7 @@
---// RobloxScriptKey Key System with online check + encrypted loader
+--// RobloxScriptKey Key System (no website check)
 local HttpService = game:GetService("HttpService")
 
--- Encrypted key (Lemon -> math sum)
+-- Encrypted key: "Lemon" = 76 + 101 + 109 + 111 + 110 = 522
 local function encodeKey(str)
     local sum = 0
     for i = 1, #str do
@@ -9,9 +9,9 @@ local function encodeKey(str)
     end
     return sum
 end
-local correctKeySum = 522 -- Lemon = 76+101+109+111+110
+local correctKeySum = 522
 
--- GUI
+-- GUI setup
 local gui = Instance.new("ScreenGui", game.CoreGui)
 gui.Name = "KeySystem"
 
@@ -46,7 +46,7 @@ button.TextColor3 = Color3.fromRGB(255, 255, 255)
 button.Font = Enum.Font.SourceSansBold
 button.TextSize = 18
 
--- Encrypted loader URL (luarmor)
+-- Encrypted loader URL (Luarmor)
 local encryptedURL = {114,104,116,116,112,115,58,47,47,97,112,105,46,108,117,97,114,109,111,114,46,110,101,116,47,102,105,108,101,115,47,118,51,47,108,111,97,100,101,114,115,47,102,102,100,102,101,97,100,102,48,97,102,55,57,56,55,52,49,56,48,54,101,97,52,48,52,54,56,50,97,57,51,56,46,108,117,97}
 local function decode(tbl)
     local s = ""
@@ -56,40 +56,16 @@ local function decode(tbl)
     return s
 end
 
--- URL for online key check
-local checkURL = "https://ajjankeysystem.infinityfreeapp.com/check.php"
-
+-- Key submit logic
 button.MouseButton1Click:Connect(function()
     local input = box.Text
     local sum = encodeKey(input)
 
-    -- local key check
-    if sum ~= correctKeySum then
-        button.Text = "❌ Invalid Key"
-        wait(1)
-        button.Text = "✅ Submit"
-        return
-    end
-
-    -- online key verification
-    local url = checkURL .. "?key=" .. HttpService:UrlEncode(input)
-    local success, response = pcall(function()
-        return HttpService:GetAsync(url)
-    end)
-
-    if success then
-        local result = HttpService:JSONDecode(response)
-        if result["success"] == true then
-            frame:Destroy()
-            -- load encrypted loader
-            loadstring(game:HttpGet(decode(encryptedURL)))()
-        else
-            button.Text = "❌ Key Invalid (Server)"
-            wait(1)
-            button.Text = "✅ Submit"
-        end
+    if sum == correctKeySum then
+        frame:Destroy()
+        loadstring(game:HttpGet(decode(encryptedURL)))()
     else
-        button.Text = "⚠️ Server Unreachable"
+        button.Text = "❌ Invalid Key"
         wait(1)
         button.Text = "✅ Submit"
     end
