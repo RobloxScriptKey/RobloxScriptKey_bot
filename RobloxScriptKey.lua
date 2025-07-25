@@ -1,9 +1,7 @@
--- RobloxScriptKey – Local Key System with encoded key sum
+-- RobloxScriptKey – Local Key System with simple "encryption" by sum of chars
 local HttpService = game:GetService("HttpService")
 
-local correctKeySum = 522  -- сумма букв "Lemon": 76+101+109+111+110
-
--- Функция для подсчёта суммы ASCII символов строки
+-- Функция для подсчёта суммы ASCII кодов символов
 local function encodeKey(str)
     local sum = 0
     for i = 1, #str do
@@ -12,7 +10,10 @@ local function encodeKey(str)
     return sum
 end
 
--- Создаём GUI
+-- "Зашифрованный" ключ — сумма символов слова "Lemon"
+local correctKeySum = 522
+
+-- GUI Setup
 local gui = Instance.new("ScreenGui", game:GetService("CoreGui"))
 gui.Name = "KeySystem"
 
@@ -22,7 +23,7 @@ frame.Position = UDim2.new(0.5, -150, 0.5, -75)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 
 local label = Instance.new("TextLabel", frame)
-label.Text = "🔑 Enter your key:"
+label.Text = "🔑 Please enter your key:"
 label.Size = UDim2.new(1, 0, 0, 30)
 label.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 label.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -30,7 +31,7 @@ label.Font = Enum.Font.SourceSansBold
 label.TextSize = 20
 
 local box = Instance.new("TextBox", frame)
-box.PlaceholderText = "Type your key"
+box.PlaceholderText = "Enter your key here"
 box.Size = UDim2.new(0.9, 0, 0, 30)
 box.Position = UDim2.new(0.05, 0, 0, 40)
 box.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
@@ -47,30 +48,20 @@ button.TextColor3 = Color3.fromRGB(255, 255, 255)
 button.Font = Enum.Font.SourceSansBold
 button.TextSize = 18
 
--- Encrypted loader URL (Luarmor)
-local encryptedURL = {
-    114,104,116,116,112,115,58,47,47,97,112,105,46,108,117,97,114,109,111,114,46,110,101,116,
-    47,102,105,108,101,115,47,118,51,47,108,111,97,100,101,114,115,47,102,102,100,102,101,97,
-    100,102,48,97,102,55,57,56,55,52,49,56,48,54,101,97,52,48,52,54,56,50,97,57,51,56,46,108,
-    117,97
-}
-
-local function decodeURL(tbl)
-    local s = ""
-    for _, v in ipairs(tbl) do
-        s = s .. string.char(v)
-    end
-    return s
+-- Скрипт, который нужно запустить после проверки ключа
+local function runScript()
+    print("✅ Correct key! Script is running now.")
+    -- Здесь можно загрузить и выполнить основной скрипт:
+    -- loadstring(game:HttpGet("YOUR_SCRIPT_URL"))()
 end
 
--- Проверка по сумме ключа и загрузка скрипта
+-- Обработка нажатия кнопки
 button.MouseButton1Click:Connect(function()
-    local input = box.Text:match("^%s*(.-)%s*$") -- убираем пробелы по краям
+    local input = box.Text:match("^%s*(.-)%s*$") -- trim пробелы
+
     if encodeKey(input) == correctKeySum then
         gui:Destroy()
-        local url = decodeURL(encryptedURL)
-        print("✅ Loading script from:", url)
-        loadstring(game:HttpGet(url))()
+        runScript()
     else
         button.Text = "❌ Invalid Key"
         wait(1)
