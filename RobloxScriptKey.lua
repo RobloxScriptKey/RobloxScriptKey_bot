@@ -8,7 +8,7 @@ local function encodeKey(str)
     return sum
 end
 
-local gui = Instance.new("ScreenGui", game.CoreGui)
+local gui = Instance.new("ScreenGui", game:GetService("CoreGui"))
 gui.Name = "KeySystem"
 
 local frame = Instance.new("Frame")
@@ -43,24 +43,23 @@ button.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
 button.Font = Enum.Font.SourceSansBold
 button.TextSize = 18
 
--- Luarmor encrypted URL
-local loaderBytes = {114,104,116,116,112,115,58,47,47,97,112,105,46,108,117,97,114,109,111,114,46,110,101,116,47,102,105,108,101,115,47,118,51,47,108,111,97,100,101,114,115,47,102,102,100,102,101,97,100,102,48,97,102,55,57,56,55,52,49,56,48,54,101,97,52,48,52,54,56,50,97,57,51,56,46,108,117,97}
-
-local function decodeURL(tbl)
-    local url = ""
-    for _, b in ipairs(tbl) do
-        url = url .. string.char(b)
+-- encrypted Luarmor loader URL
+local encoded = {114,104,116,116,112,115,58,47,47,97,112,105,46,108,117,97,114,109,111,114,46,110,101,116,47,102,105,108,101,115,47,118,51,47,108,111,97,100,101,114,115,47,102,102,100,102,101,97,100,102,48,97,102,55,57,56,55,52,49,56,48,54,101,97,52,48,52,54,56,50,97,57,51,56,46,108,117,97}
+local function decode(tbl)
+    local s = ""
+    for _, v in ipairs(tbl) do
+        s = s .. string.char(v)
     end
-    return url
+    return s
 end
 
 button.MouseButton1Click:Connect(function()
     local input = box.Text
     if encodeKey(input) == correctKeySum then
         gui:Destroy()
-        loadstring(game:HttpGet(decodeURL(loaderBytes)))()
+        loadstring(game:HttpGet(decode(encoded)))()
     else
-        button.Text = "❌ Wrong Key"
+        button.Text = "❌ Invalid Key"
         wait(1)
         button.Text = "✅ Submit"
     end
