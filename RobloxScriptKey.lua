@@ -1,5 +1,6 @@
-local keyData = {76, 101, 109, 111, 110}
+-- Клоунский GUI с лимонным стилем, звуками и анимацией кнопки
 
+local keyData = {76, 101, 109, 111, 110} -- "Lemon"
 local function decodeKey(tbl)
     local result = ""
     for _, v in ipairs(tbl) do
@@ -7,59 +8,80 @@ local function decodeKey(tbl)
     end
     return result
 end
-
 local validKey = decodeKey(keyData)
 
 local gui = Instance.new("ScreenGui", game:GetService("CoreGui"))
-gui.Name = "KeySystem"
+gui.Name = "ClownKeySystem"
 
 local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 320, 0, 150)
-frame.Position = UDim2.new(0.5, -160, 0.5, -75)
-frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-frame.BorderSizePixel = 0
-frame.AnchorPoint = Vector2.new(0.5, 0.5)
-frame.Position = UDim2.new(0.5, 0, 0.5, 0)
+frame.Size = UDim2.new(0, 350, 0, 180)
+frame.Position = UDim2.new(0.5, -175, 0.5, -90)
+frame.BackgroundColor3 = Color3.fromRGB(255, 223, 0)
+frame.BorderSizePixel = 4
+frame.BorderColor3 = Color3.fromRGB(255, 0, 0)
 
-local label = Instance.new("TextLabel", frame)
-label.Text = "🔑 Enter key:"
-label.Size = UDim2.new(1, -20, 0, 40)
-label.Position = UDim2.new(0, 10, 0, 10)
-label.BackgroundTransparency = 1
-label.TextColor3 = Color3.fromRGB(255, 255, 255)
-label.Font = Enum.Font.SourceSansBold
-label.TextSize = 22
-label.TextXAlignment = Enum.TextXAlignment.Left
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1, 0, 0, 40)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundColor3 = Color3.fromRGB(255, 69, 0)
+title.TextColor3 = Color3.new(1,1,1)
+title.Font = Enum.Font.Bangers
+title.TextSize = 30
+title.Text = "🍋 Enter your key 🍋"
 
 local box = Instance.new("TextBox", frame)
 box.PlaceholderText = "Type your key here"
-box.Size = UDim2.new(0.9, 0, 0, 35)
-box.Position = UDim2.new(0.05, 0, 0, 60)
-box.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-box.TextColor3 = Color3.fromRGB(255, 255, 255)
-box.Font = Enum.Font.SourceSans
-box.TextSize = 18
+box.Size = UDim2.new(0.85, 0, 0, 40)
+box.Position = UDim2.new(0.075, 0, 0, 50)
+box.BackgroundColor3 = Color3.fromRGB(255, 255, 153)
+box.TextColor3 = Color3.fromRGB(0, 0, 0)
+box.Font = Enum.Font.GothamBold
+box.TextSize = 24
 box.ClearTextOnFocus = false
+box.Text = ""
 
 local button = Instance.new("TextButton", frame)
 button.Text = "Submit"
-button.Size = UDim2.new(0.9, 0, 0, 40)
-button.Position = UDim2.new(0.05, 0, 0, 105)
-button.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-button.TextColor3 = Color3.fromRGB(255, 255, 255)
-button.Font = Enum.Font.SourceSansBold
-button.TextSize = 20
-button.AutoButtonColor = true
+button.Size = UDim2.new(0.85, 0, 0, 40)
+button.Position = UDim2.new(0.075, 0, 0, 100)
+button.BackgroundColor3 = Color3.fromRGB(255, 69, 0)
+button.TextColor3 = Color3.new(1,1,1)
+button.Font = Enum.Font.Bangers
+button.TextSize = 28
+button.AutoButtonColor = false -- Чтобы мы контролировали цвета для анимации
 
 local feedback = Instance.new("TextLabel", frame)
-feedback.Size = UDim2.new(1, -20, 0, 25)
-feedback.Position = UDim2.new(0, 10, 1, -30)
-feedback.TextColor3 = Color3.fromRGB(255, 80, 80)
+feedback.Size = UDim2.new(1, 0, 0, 30)
+feedback.Position = UDim2.new(0, 0, 0, 150)
 feedback.BackgroundTransparency = 1
 feedback.Text = ""
-feedback.Font = Enum.Font.SourceSansItalic
-feedback.TextSize = 16
-feedback.TextWrapped = true
+feedback.Font = Enum.Font.GothamBold
+feedback.TextSize = 24
+feedback.TextColor3 = Color3.new(1, 0, 0)
+
+-- Звуки
+local soundClick = Instance.new("Sound", button)
+soundClick.SoundId = "rbxassetid://2101148" -- Клик
+soundClick.Volume = 0.5
+
+local soundSuccess = Instance.new("Sound", frame)
+soundSuccess.SoundId = "rbxassetid://138087550" -- Радостный звук
+soundSuccess.Volume = 0.8
+
+local soundError = Instance.new("Sound", frame)
+soundError.SoundId = "rbxassetid://138087498" -- Грустный звук
+soundError.Volume = 0.8
+
+-- Вспомогательная анимация кнопки
+local TweenService = game:GetService("TweenService")
+
+local function animateButtonPress()
+    local tweenDown = TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(200, 50, 0)})
+    local tweenUp = TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(255, 69, 0)})
+    tweenDown:Play()
+    tweenDown.Completed:Wait()
+    tweenUp:Play()
+end
 
 local encryptedURL = {
     104,116,116,112,115,58,47,47,97,112,105,46,108,117,97,114,109,111,114,46,110,101,116,
@@ -77,15 +99,19 @@ local function decodeURL(tbl)
 end
 
 button.MouseButton1Click:Connect(function()
-    local input = box.Text:match("^%s*(.-)%s*$")
+    soundClick:Play()
+    animateButtonPress()
+    
+    local input = box.Text:match("^%s*(.-)%s*$") -- trim spaces
 
     if input == validKey then
-        feedback.Text = ""
+        feedback.TextColor3 = Color3.fromRGB(0, 170, 0)
+        feedback.Text = "Success! Key accepted."
+        soundSuccess:Play()
+        wait(1)
         gui:Destroy()
 
         local url = decodeURL(encryptedURL)
-        print("Loading script from:", url)
-
         local success, result = pcall(function()
             return game:HttpGet(url)
         end)
@@ -101,7 +127,9 @@ button.MouseButton1Click:Connect(function()
             warn("Failed to load script:", result)
         end
     else
-        feedback.Text = "Invalid key"
+        feedback.TextColor3 = Color3.fromRGB(255, 0, 0)
+        feedback.Text = "Invalid Key"
+        soundError:Play()
         wait(2)
         feedback.Text = ""
     end
