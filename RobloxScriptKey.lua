@@ -1,4 +1,6 @@
--- RobloxScriptKey – Key GUI with encrypted key + multilingual disguise
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
 
 local キー = {109, 102, 128, 132, 124} -- зашифрованный "Lemon"
 
@@ -13,7 +15,7 @@ end
 local مفتاح = 解読(キー)  -- = "Lemon"
 
 -- GUI
-local gui = Instance.new("ScreenGui", game:GetService("CoreGui"))
+local gui = Instance.new("ScreenGui", playerGui)
 gui.Name = "キーシステム"
 
 local frame = Instance.new("Frame", gui)
