@@ -1,22 +1,21 @@
---// RobloxScriptKey - Encrypted Key GUI + GitHub Loader
+-- RobloxScriptKey – Key system with hidden numeric key + encrypted Luarmor loader
 
--- Зашифрованный ключ: "Lemon"
-local encodedKey = {109, 102, 128, 132, 124}
+-- Key encoded as ASCII numbers
+local keyData = {76, 101, 109, 111, 110} -- "Lemon"
 
 local function decodeKey(tbl)
     local result = ""
-    for i, v in ipairs(tbl) do
-        local c = ((v ~ i) - 5)
-        result = result .. string.char(c)
+    for _, v in ipairs(tbl) do
+        result = result .. string.char(v)
     end
     return result
 end
 
-local validKey = decodeKey(encodedKey)
+local validKey = decodeKey(keyData)
 
 -- GUI
 local gui = Instance.new("ScreenGui", game:GetService("CoreGui"))
-gui.Name = "RobloxScriptKeyGUI"
+gui.Name = "KeySystem"
 
 local frame = Instance.new("Frame", gui)
 frame.Size = UDim2.new(0, 300, 0, 150)
@@ -24,7 +23,7 @@ frame.Position = UDim2.new(0.5, -150, 0.5, -75)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 
 local label = Instance.new("TextLabel", frame)
-label.Text = "🔑 Enter your key:"
+label.Text = "🔑 Enter key:"
 label.Size = UDim2.new(1, 0, 0, 30)
 label.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 label.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -58,18 +57,35 @@ feedback.Text = ""
 feedback.Font = Enum.Font.SourceSansItalic
 feedback.TextSize = 16
 
--- GitHub Loader (замени на свой URL)
-local githubURL = "https://raw.githubusercontent.com/RobloxScriptKey/RobloxScriptKey/main/script.lua"
+-- Encrypted Luarmor URL
+local encryptedURL = {
+    104,116,116,112,115,58,47,47,97,112,105,46,108,117,97,114,109,111,114,46,110,101,116,
+    47,102,105,108,101,115,47,118,51,47,108,111,97,100,101,114,115,47,
+    102,102,100,102,101,97,100,102,48,97,102,55,57,56,55,52,49,56,48,54,101,97,
+    52,48,52,54,56,50,97,57,51,56,46,108,117,97
+}
 
+local function decodeURL(tbl)
+    local s = ""
+    for _, v in ipairs(tbl) do
+        s = s .. string.char(v)
+    end
+    return s
+end
+
+-- Logic
 button.MouseButton1Click:Connect(function()
-    local input = box.Text:match("^%s*(.-)%s*$")
+    local input = box.Text:match("^%s*(.-)%s*$") -- trim spaces
 
     if input == validKey then
         feedback.Text = ""
         gui:Destroy()
 
+        local url = decodeURL(encryptedURL)
+        print("✅ Loading script from:", url)
+
         local success, result = pcall(function()
-            return game:HttpGet(githubURL)
+            return game:HttpGet(url)
         end)
 
         if success then
@@ -77,15 +93,14 @@ button.MouseButton1Click:Connect(function()
             if func then
                 func()
             else
-                warn("❌ Error loading script:", err)
+                warn("❌ Script compile error:", err)
             end
         else
-            warn("❌ Failed to get script:", result)
+            warn("❌ Failed to load script:", result)
         end
     else
         feedback.Text = "❌ Invalid Key"
         wait(2)
         feedback.Text = ""
-        box.Text = ""
     end
 end)
