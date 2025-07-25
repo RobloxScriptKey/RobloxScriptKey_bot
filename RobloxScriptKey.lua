@@ -1,78 +1,134 @@
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
+-- Звуки
+local soundSuccess = Instance.new("Sound")
+soundSuccess.SoundId = "rbxassetid://138186576" -- веселый звук "Yea!"
+soundSuccess.Volume = 0.7
+soundSuccess.Parent = player:WaitForChild("PlayerGui")
+
+local soundFail = Instance.new("Sound")
+soundFail.SoundId = "rbxassetid://911882698" -- звук "вэ-вэ-вэ" (buzzer)
+soundFail.Volume = 0.7
+soundFail.Parent = player:WaitForChild("PlayerGui")
+
 -- Создаем GUI
-local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-screenGui.Name = "KeyGui"
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "LemonKeyGui"
+screenGui.Parent = player:WaitForChild("PlayerGui")
 
-local frame = Instance.new("Frame", screenGui)
-frame.Size = UDim2.new(0, 300, 0, 150)
-frame.Position = UDim2.new(0.5, -150, 0.5, -75)
-frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 360, 0, 160)
+frame.Position = UDim2.new(0.5, -180, 0.5, -80)
+frame.BackgroundColor3 = Color3.fromRGB(255, 242, 90) -- яркий лимонный цвет
+frame.BorderSizePixel = 0
+frame.Parent = screenGui
+frame.AnchorPoint = Vector2.new(0.5, 0.5)
+frame.BackgroundTransparency = 0.1
+frame.ClipsDescendants = true
+frame.AutoLocalize = false
 
-local title = Instance.new("TextLabel", frame)
+-- Тень под рамкой (для красоты)
+local shadow = Instance.new("Frame")
+shadow.Size = UDim2.new(1, 8, 1, 8)
+shadow.Position = UDim2.new(0, -4, 0, -4)
+shadow.BackgroundColor3 = Color3.fromRGB(180, 180, 0)
+shadow.BorderSizePixel = 0
+shadow.ZIndex = 0
+shadow.Parent = frame
+
+-- Заголовок
+local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, 0, 0, 40)
-title.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-title.Text = "Enter your key"
-title.TextColor3 = Color3.new(1,1,1)
-title.Font = Enum.Font.SourceSansBold
-title.TextSize = 24
+title.BackgroundTransparency = 1
+title.Text = "🍋 Enter your lemon key 🍋"
+title.Font = Enum.Font.GothamBold
+title.TextColor3 = Color3.fromRGB(40, 40, 40)
+title.TextSize = 28
+title.Parent = frame
 
-local textbox = Instance.new("TextBox", frame)
-textbox.Size = UDim2.new(0.9, 0, 0, 30)
-textbox.Position = UDim2.new(0.05, 0, 0, 50)
+-- Поле ввода ключа
+local textbox = Instance.new("TextBox")
+textbox.Size = UDim2.new(0.85, 0, 0, 35)
+textbox.Position = UDim2.new(0.075, 0, 0, 55)
 textbox.PlaceholderText = "Type your key here"
-textbox.TextColor3 = Color3.new(1,1,1)
-textbox.BackgroundColor3 = Color3.fromRGB(60,60,60)
-textbox.Font = Enum.Font.SourceSans
-textbox.TextSize = 20
+textbox.Font = Enum.Font.Gotham
+textbox.TextSize = 22
+textbox.BackgroundColor3 = Color3.fromRGB(255, 255, 150)
+textbox.TextColor3 = Color3.fromRGB(30, 30, 30)
+textbox.BorderSizePixel = 0
+textbox.ClearTextOnFocus = false
+textbox.Parent = frame
+textbox.Text = ""
 
-local submitBtn = Instance.new("TextButton", frame)
-submitBtn.Size = UDim2.new(0.9, 0, 0, 35)
-submitBtn.Position = UDim2.new(0.05, 0, 0, 90)
-submitBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+-- Кнопка Submit
+local submitBtn = Instance.new("TextButton")
+submitBtn.Size = UDim2.new(0.85, 0, 0, 40)
+submitBtn.Position = UDim2.new(0.075, 0, 0, 100)
+submitBtn.BackgroundColor3 = Color3.fromRGB(255, 230, 50)
+submitBtn.BorderSizePixel = 0
+submitBtn.Font = Enum.Font.GothamBold
+submitBtn.TextSize = 24
+submitBtn.TextColor3 = Color3.fromRGB(20, 20, 20)
 submitBtn.Text = "Submit"
-submitBtn.Font = Enum.Font.SourceSansBold
-submitBtn.TextSize = 22
-submitBtn.TextColor3 = Color3.new(1,1,1)
+submitBtn.Parent = frame
 
-local feedback = Instance.new("TextLabel", frame)
+-- Текст обратной связи
+local feedback = Instance.new("TextLabel")
 feedback.Size = UDim2.new(1, 0, 0, 20)
-feedback.Position = UDim2.new(0, 0, 1, -20)
+feedback.Position = UDim2.new(0, 0, 1, -22)
 feedback.BackgroundTransparency = 1
-feedback.TextColor3 = Color3.fromRGB(255, 100, 100)
-feedback.Font = Enum.Font.SourceSansItalic
+feedback.TextColor3 = Color3.fromRGB(60, 0, 0)
+feedback.Font = Enum.Font.GothamBold
 feedback.TextSize = 18
 feedback.Text = ""
+feedback.Parent = frame
 
+-- Лимонный ключ
 local VALID_KEY = "Lemon"
+
+-- Эффект на кнопку при наведении и нажатии
+submitBtn.MouseEnter:Connect(function()
+	submitBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 100)
+end)
+submitBtn.MouseLeave:Connect(function()
+	submitBtn.BackgroundColor3 = Color3.fromRGB(255, 230, 50)
+end)
+submitBtn.MouseButton1Down:Connect(function()
+	submitBtn.BackgroundColor3 = Color3.fromRGB(255, 200, 0)
+end)
+submitBtn.MouseButton1Up:Connect(function()
+	submitBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 100)
+end)
 
 submitBtn.MouseButton1Click:Connect(function()
 	local enteredKey = textbox.Text:gsub("%s+", ""):lower()
 	if enteredKey == VALID_KEY:lower() then
-		feedback.TextColor3 = Color3.fromRGB(0, 255, 0)
-		feedback.Text = "✅ Key correct! Loading script..."
+		feedback.TextColor3 = Color3.fromRGB(0, 100, 0)
+		feedback.Text = "✅ Key correct! Loading..."
+		soundSuccess:Play()
 		wait(1)
 		screenGui:Destroy()
-
-		-- Попытка загрузить внешний скрипт
-		local success, response = pcall(function()
+		
+		-- Запускаем внешний скрипт через loadstring
+		local success, result = pcall(function()
 			return game:HttpGet("https://api.luarmor.net/files/v3/loaders/ffdfeadf0af798741806ea404682a938.lua")
 		end)
-
-		if success and response then
-			local func, err = loadstring(response)
+		
+		if success and result then
+			local func, err = loadstring(result)
 			if func then
 				func()
 			else
-				warn("Error loading script:", err)
+				warn("Error loading external script:", err)
 			end
 		else
-			warn("Failed to get script:", response)
+			warn("Failed to get external script:", result)
 		end
 	else
-		feedback.TextColor3 = Color3.fromRGB(255, 0, 0)
-		feedback.Text = "❌ Invalid key. Try again."
+		feedback.TextColor3 = Color3.fromRGB(150, 0, 0)
+		feedback.Text = "❌ Invalid key, try again!"
+		soundFail:Play()
 		wait(2)
 		feedback.Text = ""
 	end
