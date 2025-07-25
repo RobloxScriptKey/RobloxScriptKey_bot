@@ -2,90 +2,87 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
-local キー = {109, 102, 128, 132, 124} -- зашифрованный "Lemon"
-
-local 解読 = function(tbl)
+-- Шифрованный ключ "Lemon"
+local encrypted = {109, 102, 128, 132, 124}
+local decode = function(tbl)
     local str = ""
-    for رقم, رمز in ipairs(tbl) do
-        str = str .. string.char((رمز ~ رقم) - 5)
+    for i, v in ipairs(tbl) do
+        str = str .. string.char((v ~ i) - 5)
     end
     return str
 end
+local hiddenKey = decode(encrypted) -- = "Lemon"
 
-local مفتاح = 解読(キー)  -- = "Lemon"
-
--- GUI
+-- Clown-style GUI 🎪
 local gui = Instance.new("ScreenGui", playerGui)
-gui.Name = "キーシステム"
+gui.Name = "🤡ClownKeyUI"
 
 local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 300, 0, 150)
-frame.Position = UDim2.new(0.5, -150, 0.5, -75)
-frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+frame.Size = UDim2.new(0, 350, 0, 180)
+frame.Position = UDim2.new(0.5, -175, 0.5, -90)
+frame.BackgroundColor3 = Color3.fromRGB(255, 204, 0)
+frame.BorderSizePixel = 8
+frame.BorderColor3 = Color3.fromRGB(255, 0, 0)
 
-local label = Instance.new("TextLabel", frame)
-label.Text = "🔑 Enter your key:"
-label.Size = UDim2.new(1, 0, 0, 30)
-label.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-label.TextColor3 = Color3.fromRGB(255, 255, 255)
-label.Font = Enum.Font.SourceSansBold
-label.TextSize = 20
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1, 0, 0, 40)
+title.Text = "🎪 Welcome Clown!"
+title.TextColor3 = Color3.fromRGB(0, 0, 255)
+title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.Arcade
+title.TextSize = 28
 
 local box = Instance.new("TextBox", frame)
-box.PlaceholderText = "Type your key"
-box.Size = UDim2.new(0.9, 0, 0, 30)
-box.Position = UDim2.new(0.05, 0, 0, 40)
-box.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-box.TextColor3 = Color3.fromRGB(255, 255, 255)
-box.Font = Enum.Font.SourceSans
-box.TextSize = 18
+box.Size = UDim2.new(0.9, 0, 0, 35)
+box.Position = UDim2.new(0.05, 0, 0, 55)
+box.PlaceholderText = "🤡 Type the magic word"
+box.BackgroundColor3 = Color3.fromRGB(255, 230, 230)
+box.TextColor3 = Color3.fromRGB(0, 0, 0)
+box.Font = Enum.Font.SciFi
+box.TextSize = 20
 
 local button = Instance.new("TextButton", frame)
-button.Text = "✅ Submit"
-button.Size = UDim2.new(0.9, 0, 0, 30)
-button.Position = UDim2.new(0.05, 0, 0, 80)
-button.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-button.TextColor3 = Color3.fromRGB(255, 255, 255)
-button.Font = Enum.Font.SourceSansBold
-button.TextSize = 18
+button.Size = UDim2.new(0.9, 0, 0, 35)
+button.Position = UDim2.new(0.05, 0, 0, 100)
+button.Text = "🎉 Let me in!"
+button.BackgroundColor3 = Color3.fromRGB(0, 255, 127)
+button.TextColor3 = Color3.fromRGB(0, 0, 0)
+button.Font = Enum.Font.GothamBold
+button.TextSize = 22
 
-local feedback = Instance.new("TextLabel", frame)
-feedback.Size = UDim2.new(1, 0, 0, 20)
-feedback.Position = UDim2.new(0, 0, 1, -20)
-feedback.TextColor3 = Color3.fromRGB(255, 80, 80)
-feedback.BackgroundTransparency = 1
-feedback.Text = ""
-feedback.Font = Enum.Font.SourceSansItalic
-feedback.TextSize = 16
+local msg = Instance.new("TextLabel", frame)
+msg.Size = UDim2.new(1, 0, 0, 20)
+msg.Position = UDim2.new(0, 0, 1, -20)
+msg.BackgroundTransparency = 1
+msg.TextColor3 = Color3.fromRGB(255, 0, 0)
+msg.Font = Enum.Font.SourceSansItalic
+msg.TextSize = 16
+msg.Text = ""
 
--- Зашифрованная GitHub-ссылка (замени на свою)
+-- Твой скрипт с GitHub
 local githubURL = "https://raw.githubusercontent.com/RobloxScriptKey/RobloxScriptKey/main/script.lua"
 
 button.MouseButton1Click:Connect(function()
     local input = box.Text:match("^%s*(.-)%s*$")
 
-    if input == مفتاح then
-        feedback.Text = ""
+    if input == hiddenKey then
+        msg.Text = "🎊 Correct! Launching..."
         gui:Destroy()
 
-        local success, result = pcall(function()
+        local success, response = pcall(function()
             return game:HttpGet(githubURL)
         end)
 
         if success then
-            local func, err = loadstring(result)
-            if func then
-                func()
-            else
-                warn("❌ Script error:", err)
-            end
+            local func = loadstring(response)
+            if func then func() end
         else
-            warn("❌ Failed to get script:", result)
+            warn("💥 Failed to load script:", response)
         end
     else
-        feedback.Text = "❌ Invalid Key"
+        msg.Text = "🤡 Wrong key, silly!"
         wait(2)
-        feedback.Text = ""
+        msg.Text = ""
         box.Text = ""
     end
 end)
