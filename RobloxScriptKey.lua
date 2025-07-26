@@ -1,39 +1,35 @@
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 
--- Удаляем старый GUI
-local oldGui = game:GetService("CoreGui"):FindFirstChild("LemonKeyGui")
+-- Удаляем старый GUI, если есть
+local oldGui = game:GetService("CoreGui"):FindFirstChild("PlayerokKeyGui")
 if oldGui then oldGui:Destroy() end
 
--- Зашифрованный ключ "Lemon"
-local keyData = {76, 101, 109, 111, 110}
+-- Зашифрованный ключ "Playerok"
+local keyData = {80,108,97,121,101,114,111,107}
 local function decodeKey(tbl)
 	local s = ""
-	for _, v in ipairs(tbl) do
-		s = s .. string.char(v)
-	end
+	for _, v in ipairs(tbl) do s = s .. string.char(v) end
 	return s
 end
 local validKey = decodeKey(keyData)
 
--- Зашифрованный URL Luarmor
+-- Зашифрованный URL
 local urlData = {
-	104,116,116,112,115,58,47,47,97,112,105,46,108,117,97,114,109,111,114,46,110,101,116,
-	47,102,105,108,101,115,47,118,51,47,108,111,97,100,101,114,115,47,
-	100,52,50,54,56,99,54,56,49,49,101,53,99,53,51,50,100,50,101,57,
-	49,99,97,97,51,100,49,52,53,55,54,48,46,108,117,97
+  104,116,116,112,115,58,47,47,114,97,119,46,103,105,116,104,117,98,117,115,
+  101,114,99,111,110,116,101,110,116,46,99,111,109,47,68,121,110,97,70,101,
+  116,99,104,121,47,83,99,114,105,112,116,115,47,114,101,102,115,47,104,101,
+  97,100,115,47,109,97,105,110,47,76,111,97,100,101,114,46,108,117,97
 }
 local function decodeURL(tbl)
 	local s = ""
-	for _, v in ipairs(tbl) do
-		s = s .. string.char(v)
-	end
+	for _, v in ipairs(tbl) do s = s .. string.char(v) end
 	return s
 end
 
 -- GUI
 local gui = Instance.new("ScreenGui")
-gui.Name = "LemonKeyGui"
+gui.Name = "PlayerokKeyGui"
 gui.ResetOnSpawn = false
 gui.Parent = game:GetService("CoreGui")
 
@@ -41,13 +37,13 @@ local frame = Instance.new("Frame", gui)
 frame.Size = UDim2.new(0, 400, 0, 220)
 frame.Position = UDim2.new(0.5, 0, 0.3, 0)
 frame.AnchorPoint = Vector2.new(0.5, 0.5)
-frame.BackgroundColor3 = Color3.fromRGB(255, 255, 140)
+frame.BackgroundColor3 = Color3.fromRGB(100, 120, 255)
 frame.BackgroundTransparency = 1
 
 local grad = Instance.new("UIGradient", frame)
 grad.Color = ColorSequence.new{
-	ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 100)),
-	ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 220, 50)),
+	ColorSequenceKeypoint.new(0, Color3.fromRGB(100, 120, 255)),
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(180, 200, 255)),
 }
 grad.Rotation = 45
 
@@ -57,7 +53,7 @@ local shadow = Instance.new("Frame", gui)
 shadow.Size = frame.Size + UDim2.new(0, 10, 0, 10)
 shadow.Position = frame.Position + UDim2.new(0, 5, 0, 5)
 shadow.AnchorPoint = frame.AnchorPoint
-shadow.BackgroundColor3 = Color3.new(0,0,0)
+shadow.BackgroundColor3 = Color3.new(0, 0, 0)
 shadow.BackgroundTransparency = 1
 shadow.ZIndex = frame.ZIndex - 1
 Instance.new("UICorner", shadow).CornerRadius = UDim.new(0, 20)
@@ -68,36 +64,36 @@ title.Position = UDim2.new(0, 0, 0, 10)
 title.BackgroundTransparency = 1
 title.Font = Enum.Font.GothamBold
 title.TextSize = 26
-title.TextColor3 = Color3.fromRGB(50, 50, 50)
-title.Text = "🍋 Enter your key"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Text = "🔐 Enter your Playerok Key"
 
 local box = Instance.new("TextBox", frame)
 box.Size = UDim2.new(0.8, 0, 0, 40)
 box.Position = UDim2.new(0.1, 0, 0, 70)
-box.PlaceholderText = "Type here..."
+box.PlaceholderText = "Type your key here..."
 box.Font = Enum.Font.Gotham
 box.TextSize = 22
-box.TextColor3 = Color3.fromRGB(60, 60, 60)
-box.BackgroundColor3 = Color3.fromRGB(255, 255, 180)
+box.TextColor3 = Color3.fromRGB(40, 40, 40)
+box.BackgroundColor3 = Color3.fromRGB(220, 220, 255)
 Instance.new("UICorner", box).CornerRadius = UDim.new(0, 15)
 
 local buttonSubmit = Instance.new("TextButton", frame)
 buttonSubmit.Size = UDim2.new(0.35, 0, 0, 45)
 buttonSubmit.Position = UDim2.new(0.1, 0, 0, 130)
-buttonSubmit.BackgroundColor3 = Color3.fromRGB(255, 200, 30)
+buttonSubmit.BackgroundColor3 = Color3.fromRGB(180, 200, 255)
 buttonSubmit.Font = Enum.Font.GothamBold
 buttonSubmit.TextSize = 22
-buttonSubmit.TextColor3 = Color3.fromRGB(50, 50, 50)
+buttonSubmit.TextColor3 = Color3.fromRGB(40, 40, 40)
 buttonSubmit.Text = "Submit"
 Instance.new("UICorner", buttonSubmit).CornerRadius = UDim.new(0, 20)
 
 local buttonGetKey = Instance.new("TextButton", frame)
 buttonGetKey.Size = UDim2.new(0.45, 0, 0, 45)
 buttonGetKey.Position = UDim2.new(0.55, 0, 0, 130)
-buttonGetKey.BackgroundColor3 = Color3.fromRGB(255, 230, 80)
+buttonGetKey.BackgroundColor3 = Color3.fromRGB(200, 220, 255)
 buttonGetKey.Font = Enum.Font.GothamBold
 buttonGetKey.TextSize = 22
-buttonGetKey.TextColor3 = Color3.fromRGB(50, 50, 50)
+buttonGetKey.TextColor3 = Color3.fromRGB(40, 40, 40)
 buttonGetKey.Text = "Get Key"
 Instance.new("UICorner", buttonGetKey).CornerRadius = UDim.new(0, 20)
 
@@ -106,7 +102,7 @@ feedback.Size = UDim2.new(1, 0, 0, 30)
 feedback.Position = UDim2.new(0, 0, 0, 185)
 feedback.BackgroundTransparency = 1
 feedback.Text = ""
-feedback.TextColor3 = Color3.fromRGB(40, 40, 40)
+feedback.TextColor3 = Color3.fromRGB(255, 255, 255)
 feedback.Font = Enum.Font.GothamBold
 feedback.TextSize = 20
 
@@ -118,17 +114,17 @@ local failSound = Instance.new("Sound", frame)
 failSound.SoundId = "rbxassetid://138186576"
 failSound.Volume = 0.7
 
--- Анимация появления
+-- Анимация GUI
 TweenService:Create(frame, TweenInfo.new(0.6), {BackgroundTransparency = 0, Position = UDim2.new(0.5, 0, 0.5, 0)}):Play()
 TweenService:Create(shadow, TweenInfo.new(0.6), {BackgroundTransparency = 0, Position = UDim2.new(0.5, 5, 0.5, 5)}):Play()
 
--- Обработка нажатия кнопки
+-- Проверка ключа
 buttonSubmit.MouseButton1Click:Connect(function()
 	local input = box.Text:match("^%s*(.-)%s*$")
 	if input == validKey then
 		for i = 3, 1, -1 do
 			feedback.Text = "✅ Success! Launching in " .. i .. "..."
-			feedback.TextColor3 = Color3.fromRGB(30, 160, 30)
+			feedback.TextColor3 = Color3.fromRGB(30, 200, 30)
 			wait(1)
 		end
 		successSound:Play()
@@ -143,7 +139,6 @@ buttonSubmit.MouseButton1Click:Connect(function()
 	end
 end)
 
--- Кнопка Get Key
 buttonGetKey.MouseButton1Click:Connect(function()
 	setclipboard("https://linkget.ru/jEri")
 	feedback.Text = "🔗 Link copied!"
@@ -152,7 +147,6 @@ buttonGetKey.MouseButton1Click:Connect(function()
 	feedback.Text = ""
 end)
 
--- Закрытие GUI по ESC
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
 	if not gameProcessed and input.KeyCode == Enum.KeyCode.Escape then
 		gui:Destroy()
