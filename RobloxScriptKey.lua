@@ -122,7 +122,7 @@ failSound.Volume = 0.7
 TweenService:Create(frame, TweenInfo.new(0.6), {BackgroundTransparency = 0, Position = UDim2.new(0.5, 0, 0.5, 0)}):Play()
 TweenService:Create(shadow, TweenInfo.new(0.6), {BackgroundTransparency = 0, Position = UDim2.new(0.5, 5, 0.5, 5)}):Play()
 
--- ✅ Обработка ввода и отсчёта
+-- Обработка нажатия кнопки
 buttonSubmit.MouseButton1Click:Connect(function()
 	local input = box.Text:match("^%s*(.-)%s*$")
 	if input == validKey then
@@ -152,7 +152,7 @@ buttonGetKey.MouseButton1Click:Connect(function()
 	feedback.Text = ""
 end)
 
--- Закрытие GUI на Esc
+-- Закрытие GUI по ESC
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
 	if not gameProcessed and input.KeyCode == Enum.KeyCode.Escape then
 		gui:Destroy()
