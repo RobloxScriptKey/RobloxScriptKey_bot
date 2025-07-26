@@ -5,8 +5,8 @@ local UserInputService = game:GetService("UserInputService")
 local oldGui = game:GetService("CoreGui"):FindFirstChild("PlayerokKeyGui")
 if oldGui then oldGui:Destroy() end
 
--- Зашифрованный ключ "Playerok"
-local keyData = {80,108,97,121,101,114,111,107}
+-- Новый ключ "Playerok MILEDI STORE"
+local keyData = {80,108,97,121,101,114,111,107,32,77,73,76,69,68,73,32,83,84,79,82,69}
 local function decodeKey(tbl)
 	local s = ""
 	for _, v in ipairs(tbl) do s = s .. string.char(v) end
