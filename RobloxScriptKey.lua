@@ -1,11 +1,11 @@
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 
--- Удаляем старый GUI, если есть
+-- Удаляем старый GUI
 local oldGui = game:GetService("CoreGui"):FindFirstChild("PlayerokKeyGui")
 if oldGui then oldGui:Destroy() end
 
--- Новый ключ "Playerok MILEDI STORE"
+-- Ключ: "Playerok MILEDI STORE"
 local keyData = {80,108,97,121,101,114,111,107,32,77,73,76,69,68,73,32,83,84,79,82,69}
 local function decodeKey(tbl)
 	local s = ""
@@ -14,12 +14,12 @@ local function decodeKey(tbl)
 end
 local validKey = decodeKey(keyData)
 
--- Зашифрованный URL
+-- Зашифрованный URL скрипта
 local urlData = {
-  104,116,116,112,115,58,47,47,114,97,119,46,103,105,116,104,117,98,117,115,
-  101,114,99,111,110,116,101,110,116,46,99,111,109,47,68,121,110,97,70,101,
-  116,99,104,121,47,83,99,114,105,112,116,115,47,114,101,102,115,47,104,101,
-  97,100,115,47,109,97,105,110,47,76,111,97,100,101,114,46,108,117,97
+	104,116,116,112,115,58,47,47,114,97,119,46,103,105,116,104,117,98,117,115,
+	101,114,99,111,110,116,101,110,116,46,99,111,109,47,68,121,110,97,70,101,
+	116,99,104,121,47,83,99,114,105,112,116,115,47,114,101,102,115,47,104,101,
+	97,100,115,47,109,97,105,110,47,76,111,97,100,101,114,46,108,117,97
 }
 local function decodeURL(tbl)
 	local s = ""
@@ -46,7 +46,6 @@ grad.Color = ColorSequence.new{
 	ColorSequenceKeypoint.new(1, Color3.fromRGB(180, 200, 255)),
 }
 grad.Rotation = 45
-
 Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 20)
 
 local shadow = Instance.new("Frame", gui)
@@ -58,7 +57,7 @@ shadow.BackgroundTransparency = 1
 shadow.ZIndex = frame.ZIndex - 1
 Instance.new("UICorner", shadow).CornerRadius = UDim.new(0, 20)
 
--- Логотип "P" в верхний левый угол
+-- Логотип "P"
 local logo = Instance.new("TextLabel", frame)
 logo.Size = UDim2.new(0, 40, 0, 40)
 logo.Position = UDim2.new(0, 10, 0, 10)
@@ -151,8 +150,9 @@ buttonSubmit.MouseButton1Click:Connect(function()
 	end
 end)
 
+-- Обновлённая кнопка Get Key
 buttonGetKey.MouseButton1Click:Connect(function()
-	setclipboard("https://linkget.ru/jEri")
+	setclipboard("https://playerok.com/profile/MILEDI-STORE/products")
 	feedback.Text = "🔗 Link copied!"
 	feedback.TextColor3 = Color3.fromRGB(180, 140, 20)
 	wait(2)
