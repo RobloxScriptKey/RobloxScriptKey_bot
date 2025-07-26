@@ -58,9 +58,21 @@ shadow.BackgroundTransparency = 1
 shadow.ZIndex = frame.ZIndex - 1
 Instance.new("UICorner", shadow).CornerRadius = UDim.new(0, 20)
 
+-- Логотип "P" в верхний левый угол
+local logo = Instance.new("TextLabel", frame)
+logo.Size = UDim2.new(0, 40, 0, 40)
+logo.Position = UDim2.new(0, 10, 0, 10)
+logo.BackgroundTransparency = 1
+logo.Text = "P"
+logo.Font = Enum.Font.GothamBlack
+logo.TextSize = 36
+logo.TextColor3 = Color3.fromRGB(180, 200, 255)
+logo.TextStrokeColor3 = Color3.fromRGB(100, 120, 255)
+logo.TextStrokeTransparency = 0
+
 local title = Instance.new("TextLabel", frame)
 title.Size = UDim2.new(1, 0, 0, 40)
-title.Position = UDim2.new(0, 0, 0, 10)
+title.Position = UDim2.new(0, 0, 0, 60)
 title.BackgroundTransparency = 1
 title.Font = Enum.Font.GothamBold
 title.TextSize = 26
@@ -69,7 +81,7 @@ title.Text = "🔐 Enter your Playerok Key"
 
 local box = Instance.new("TextBox", frame)
 box.Size = UDim2.new(0.8, 0, 0, 40)
-box.Position = UDim2.new(0.1, 0, 0, 70)
+box.Position = UDim2.new(0.1, 0, 0, 120)
 box.PlaceholderText = "Type your key here..."
 box.Font = Enum.Font.Gotham
 box.TextSize = 22
@@ -79,7 +91,7 @@ Instance.new("UICorner", box).CornerRadius = UDim.new(0, 15)
 
 local buttonSubmit = Instance.new("TextButton", frame)
 buttonSubmit.Size = UDim2.new(0.35, 0, 0, 45)
-buttonSubmit.Position = UDim2.new(0.1, 0, 0, 130)
+buttonSubmit.Position = UDim2.new(0.1, 0, 0, 180)
 buttonSubmit.BackgroundColor3 = Color3.fromRGB(180, 200, 255)
 buttonSubmit.Font = Enum.Font.GothamBold
 buttonSubmit.TextSize = 22
@@ -89,7 +101,7 @@ Instance.new("UICorner", buttonSubmit).CornerRadius = UDim.new(0, 20)
 
 local buttonGetKey = Instance.new("TextButton", frame)
 buttonGetKey.Size = UDim2.new(0.45, 0, 0, 45)
-buttonGetKey.Position = UDim2.new(0.55, 0, 0, 130)
+buttonGetKey.Position = UDim2.new(0.55, 0, 0, 180)
 buttonGetKey.BackgroundColor3 = Color3.fromRGB(200, 220, 255)
 buttonGetKey.Font = Enum.Font.GothamBold
 buttonGetKey.TextSize = 22
@@ -99,7 +111,7 @@ Instance.new("UICorner", buttonGetKey).CornerRadius = UDim.new(0, 20)
 
 local feedback = Instance.new("TextLabel", frame)
 feedback.Size = UDim2.new(1, 0, 0, 30)
-feedback.Position = UDim2.new(0, 0, 0, 185)
+feedback.Position = UDim2.new(0, 0, 0, 235)
 feedback.BackgroundTransparency = 1
 feedback.Text = ""
 feedback.TextColor3 = Color3.fromRGB(255, 255, 255)
