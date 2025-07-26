@@ -1,20 +1,25 @@
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 
+-- Удаляем старый GUI, если есть
+local oldGui = game:GetService("CoreGui"):FindFirstChild("LemonKeyGui")
+if oldGui then
+    oldGui:Destroy()
+end
+
+-- Создаём новый GUI
 local gui = Instance.new("ScreenGui")
 gui.Name = "LemonKeyGui"
 gui.ResetOnSpawn = false
 gui.Parent = game:GetService("CoreGui")
 
--- Основной фрейм с градиентом
 local frame = Instance.new("Frame", gui)
 frame.Size = UDim2.new(0, 400, 0, 220)
-frame.Position = UDim2.new(0.5, 0, 0.5, 0)
+frame.Position = UDim2.new(0.5, 0, 0.3, 0)
 frame.AnchorPoint = Vector2.new(0.5, 0.5)
 frame.BackgroundColor3 = Color3.fromRGB(255, 255, 140)
-frame.BackgroundTransparency = 0
+frame.BackgroundTransparency = 1 -- начальная прозрачность для анимации
 
--- Градиент
 local grad = Instance.new("UIGradient", frame)
 grad.Color = ColorSequence.new{
     ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 100)),
@@ -22,11 +27,9 @@ grad.Color = ColorSequence.new{
 }
 grad.Rotation = 45
 
--- Скругление углов
 local corner = Instance.new("UICorner", frame)
 corner.CornerRadius = UDim.new(0, 20)
 
--- Тень под фреймом
 local shadow = Instance.new("Frame", gui)
 shadow.Size = frame.Size + UDim2.new(0, 10, 0, 10)
 shadow.Position = frame.Position + UDim2.new(0, 5, 0, 5)
@@ -36,8 +39,8 @@ shadow.BackgroundTransparency = 0.7
 shadow.ZIndex = frame.ZIndex - 1
 local shadowCorner = Instance.new("UICorner", shadow)
 shadowCorner.CornerRadius = corner.CornerRadius
+shadow.BackgroundTransparency = 1 -- для анимации
 
--- Заголовок
 local title = Instance.new("TextLabel", frame)
 title.Size = UDim2.new(1, 0, 0, 40)
 title.Position = UDim2.new(0, 0, 0, 10)
@@ -47,7 +50,6 @@ title.TextSize = 26
 title.TextColor3 = Color3.fromRGB(50, 50, 50)
 title.Text = "🍋 Enter your Lemon Key"
 
--- Текстовое поле ввода
 local box = Instance.new("TextBox", frame)
 box.Size = UDim2.new(0.8, 0, 0, 40)
 box.Position = UDim2.new(0.1, 0, 0, 70)
@@ -63,7 +65,6 @@ box.AutoLocalize = false
 local boxCorner = Instance.new("UICorner", box)
 boxCorner.CornerRadius = UDim.new(0, 15)
 
--- Кнопка Submit
 local buttonSubmit = Instance.new("TextButton", frame)
 buttonSubmit.Size = UDim2.new(0.35, 0, 0, 45)
 buttonSubmit.Position = UDim2.new(0.1, 0, 0, 130)
@@ -75,7 +76,6 @@ buttonSubmit.Text = "Submit"
 local submitCorner = Instance.new("UICorner", buttonSubmit)
 submitCorner.CornerRadius = UDim.new(0, 20)
 
--- Кнопка Get Key
 local buttonGetKey = Instance.new("TextButton", frame)
 buttonGetKey.Size = UDim2.new(0.45, 0, 0, 45)
 buttonGetKey.Position = UDim2.new(0.55, 0, 0, 130)
@@ -87,7 +87,6 @@ buttonGetKey.Text = "Get Key"
 local getKeyCorner = Instance.new("UICorner", buttonGetKey)
 getKeyCorner.CornerRadius = UDim.new(0, 20)
 
--- Сообщение о статусе
 local feedback = Instance.new("TextLabel", frame)
 feedback.Size = UDim2.new(1, 0, 0, 30)
 feedback.Position = UDim2.new(0, 0, 0, 185)
@@ -97,28 +96,20 @@ feedback.TextColor3 = Color3.fromRGB(40, 40, 40)
 feedback.Font = Enum.Font.GothamBold
 feedback.TextSize = 20
 
--- Звуки
 local soundSuccess = Instance.new("Sound", frame)
-soundSuccess.SoundId = "rbxassetid://9118820942" -- пример звука "Yea"
+soundSuccess.SoundId = "rbxassetid://9118820942"
 soundSuccess.Volume = 0.6
 
 local soundFail = Instance.new("Sound", frame)
-soundFail.SoundId = "rbxassetid://138186576" -- пример звука "Error beep"
+soundFail.SoundId = "rbxassetid://138186576"
 soundFail.Volume = 0.6
 
--- Анимация появления интерфейса
-frame.Position = UDim2.new(0.5, 0, 0.3, 0)
-frame.BackgroundTransparency = 1
-shadow.Position = frame.Position + UDim2.new(0, 5, 0, 5)
-shadow.BackgroundTransparency = 1
+-- Плавное появление GUI
+local tweenInFrame = TweenService:Create(frame, TweenInfo.new(0.7, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundTransparency = 0, Position = UDim2.new(0.5, 0, 0.5, 0)})
+local tweenInShadow = TweenService:Create(shadow, TweenInfo.new(0.7, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundTransparency = 0, Position = UDim2.new(0.5, 5, 0.5, 5)})
+tweenInFrame:Play()
+tweenInShadow:Play()
 
-local tweenIn = TweenService:Create(frame, TweenInfo.new(0.7, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundTransparency = 0, Position = UDim2.new(0.5, 0, 0.5, 0)})
-local shadowTweenIn = TweenService:Create(shadow, TweenInfo.new(0.7, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundTransparency = 0, Position = UDim2.new(0.5, 5, 0.5, 5)})
-
-tweenIn:Play()
-shadowTweenIn:Play()
-
--- Ключ и логика
 local validKey = "Lemon"
 
 buttonSubmit.MouseButton1Click:Connect(function()
@@ -129,7 +120,6 @@ buttonSubmit.MouseButton1Click:Connect(function()
         soundSuccess:Play()
         wait(2)
         gui:Destroy()
-        -- Запуск основного скрипта сюда, например:
         loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/ffdfeadf0af798741806ea404682a938.lua"))()
     else
         feedback.TextColor3 = Color3.fromRGB(180, 20, 20)
@@ -148,7 +138,6 @@ buttonGetKey.MouseButton1Click:Connect(function()
     feedback.Text = ""
 end)
 
--- Убрать GUI при нажатии Esc
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if not gameProcessed then
         if input.KeyCode == Enum.KeyCode.Escape then
