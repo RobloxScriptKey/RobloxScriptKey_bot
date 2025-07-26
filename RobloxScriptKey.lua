@@ -1,7 +1,7 @@
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 
--- Удаляем старый GUI, если есть
+-- Удаляем старый GUI
 local oldGui = game:GetService("CoreGui"):FindFirstChild("LemonKeyGui")
 if oldGui then oldGui:Destroy() end
 
@@ -16,7 +16,7 @@ local function decodeKey(tbl)
 end
 local validKey = decodeKey(keyData)
 
--- Зашифрованный URL Luarmor (https://api.luarmor.net/files/v3/loaders/d4268c6811e5c532d2e91caa3d145760.lua)
+-- Зашифрованный URL Luarmor
 local urlData = {
 	104,116,116,112,115,58,47,47,97,112,105,46,108,117,97,114,109,111,114,46,110,101,116,
 	47,102,105,108,101,115,47,118,51,47,108,111,97,100,101,114,115,47,
@@ -31,7 +31,7 @@ local function decodeURL(tbl)
 	return s
 end
 
--- Создание GUI
+-- GUI
 local gui = Instance.new("ScreenGui")
 gui.Name = "LemonKeyGui"
 gui.ResetOnSpawn = false
@@ -122,14 +122,16 @@ failSound.Volume = 0.7
 TweenService:Create(frame, TweenInfo.new(0.6), {BackgroundTransparency = 0, Position = UDim2.new(0.5, 0, 0.5, 0)}):Play()
 TweenService:Create(shadow, TweenInfo.new(0.6), {BackgroundTransparency = 0, Position = UDim2.new(0.5, 5, 0.5, 5)}):Play()
 
--- Проверка
+-- ✅ Обработка ввода и отсчёта
 buttonSubmit.MouseButton1Click:Connect(function()
 	local input = box.Text:match("^%s*(.-)%s*$")
 	if input == validKey then
-		feedback.Text = "✅ Success!"
-		feedback.TextColor3 = Color3.fromRGB(30, 160, 30)
+		for i = 3, 1, -1 do
+			feedback.Text = "✅ Success! Launching in " .. i .. "..."
+			feedback.TextColor3 = Color3.fromRGB(30, 160, 30)
+			wait(1)
+		end
 		successSound:Play()
-		wait(1)
 		gui:Destroy()
 		loadstring(game:HttpGet(decodeURL(urlData)))()
 	else
@@ -141,6 +143,7 @@ buttonSubmit.MouseButton1Click:Connect(function()
 	end
 end)
 
+-- Кнопка Get Key
 buttonGetKey.MouseButton1Click:Connect(function()
 	setclipboard("https://linkget.ru/jEri")
 	feedback.Text = "🔗 Link copied!"
@@ -149,6 +152,7 @@ buttonGetKey.MouseButton1Click:Connect(function()
 	feedback.Text = ""
 end)
 
+-- Закрытие GUI на Esc
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
 	if not gameProcessed and input.KeyCode == Enum.KeyCode.Escape then
 		gui:Destroy()
