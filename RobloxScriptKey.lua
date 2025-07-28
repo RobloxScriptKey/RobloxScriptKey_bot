@@ -1,18 +1,19 @@
 -- Ключ
 local correctKey = "Playerok MILEDI STORE"
 
+-- Проверка ключа
 local function checkKey(input)
     return input == correctKey
 end
 
--- Создаем UI
+-- UI
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "PlayerokKeyUI"
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 local Frame = Instance.new("Frame")
-Frame.Size = UDim2.new(0, 420, 0, 240)
-Frame.Position = UDim2.new(0.5, -210, 0.5, -120)
+Frame.Size = UDim2.new(0, 420, 0, 260)
+Frame.Position = UDim2.new(0.5, -210, 0.5, -130)
 Frame.BackgroundColor3 = Color3.fromRGB(15, 15, 25)
 Frame.BorderSizePixel = 0
 Frame.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -74,25 +75,24 @@ ErrorLabel.BackgroundTransparency = 1
 ErrorLabel.TextXAlignment = Enum.TextXAlignment.Left
 ErrorLabel.Parent = Frame
 
--- Проверка ключа и запуск двух скриптов
+-- Подтверждение ключа
 Button.MouseButton1Click:Connect(function()
     if checkKey(Input.Text) then
         ScreenGui:Destroy()
-
-        -- Загружаем farmcoin
+        
+        -- ✅ Запуск внешних скриптов
         local success1, err1 = pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/spawnerscript/MurderMystery2/refs/heads/main/farmcoin.lua"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/spawnerscript/MurderMystery2/main/farmcoin.lua"))()
         end)
         if not success1 then
-            warn("Ошибка загрузки farmcoin: " .. tostring(err1))
+            warn("Ошибка скрипта 1: " .. tostring(err1))
         end
 
-        -- Загружаем BeeconHub
         local success2, err2 = pcall(function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/BaconBossScript/BeeconHub/main/BeeconHub"))()
         end)
         if not success2 then
-            warn("Ошибка загрузки BeeconHub: " .. tostring(err2))
+            warn("Ошибка скрипта 2: " .. tostring(err2))
         end
 
     else
