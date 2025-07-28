@@ -1,12 +1,9 @@
--- Ключ "Playerok MILEDI STORE"
 local correctKey = "Playerok MILEDI STORE"
 
 local function checkKey(input)
-    return input == correctKey
-end
-
-local function trim(s)
-    return s:match("^%s*(.-)%s*$")
+    -- Убираем лишние пробелы по краям, сравниваем строго по содержимому и регистру
+    local trimmedInput = input:match("^%s*(.-)%s*$")
+    return trimmedInput == correctKey
 end
 
 -- Создаем UI под стиль Playerok
@@ -18,7 +15,7 @@ ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 local Frame = Instance.new("Frame")
 Frame.Size = UDim2.new(0, 420, 0, 240)
 Frame.Position = UDim2.new(0.5, -210, 0.5, -120)
-Frame.BackgroundColor3 = Color3.fromRGB(15, 15, 25) -- темно-синий
+Frame.BackgroundColor3 = Color3.fromRGB(15, 15, 25)
 Frame.BorderSizePixel = 0
 Frame.AnchorPoint = Vector2.new(0.5, 0.5)
 Frame.Parent = ScreenGui
@@ -29,7 +26,7 @@ Logo.Size = UDim2.new(1, 0, 0, 60)
 Logo.Position = UDim2.new(0, 0, 0, 10)
 Logo.Font = Enum.Font.GothamBold
 Logo.TextSize = 44
-Logo.TextColor3 = Color3.fromRGB(44, 181, 230) -- бирюзовый цвет
+Logo.TextColor3 = Color3.fromRGB(44, 181, 230)
 Logo.BackgroundTransparency = 1
 Logo.Parent = Frame
 
@@ -64,7 +61,7 @@ Button.Position = UDim2.new(0, 20, 0, 190)
 Button.Font = Enum.Font.GothamBold
 Button.TextSize = 22
 Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-Button.BackgroundColor3 = Color3.fromRGB(44, 181, 230) -- бирюзовый
+Button.BackgroundColor3 = Color3.fromRGB(44, 181, 230)
 Button.BorderSizePixel = 0
 Button.Parent = Frame
 
@@ -80,15 +77,11 @@ ErrorLabel.TextXAlignment = Enum.TextXAlignment.Left
 ErrorLabel.Parent = Frame
 
 Button.MouseButton1Click:Connect(function()
-    local userInput = trim(Input.Text)
-    print("Введённый ключ (trimmed):", '"' .. userInput .. '"', "Длина:", #userInput)
-    if checkKey(userInput) then
-        print("Ключ принят!")
+    if checkKey(Input.Text) then
         ScreenGui:Destroy()
-        -- Здесь вставь запуск своих скриптов, например:
-        -- loadstring(game:HttpGet("https://example.com/твой-скрипт.lua", true))()
+        -- Здесь запускаем твои скрипты:
+        -- loadstring(game:HttpGet("https://твоя-ссылка-на-скрипт.lua", true))()
     else
-        print("Неверный ключ!")
         ErrorLabel.Text = "❌ Неверный ключ. Получите его на Playerok (MILEDI STORE)"
     end
 end)
