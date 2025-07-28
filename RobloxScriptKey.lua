@@ -5,6 +5,10 @@ local function checkKey(input)
     return input == correctKey
 end
 
+local function trim(s)
+    return s:match("^%s*(.-)%s*$")
+end
+
 -- Создаем UI под стиль Playerok
 
 local ScreenGui = Instance.new("ScreenGui")
@@ -76,11 +80,15 @@ ErrorLabel.TextXAlignment = Enum.TextXAlignment.Left
 ErrorLabel.Parent = Frame
 
 Button.MouseButton1Click:Connect(function()
-    if checkKey(Input.Text) then
+    local userInput = trim(Input.Text)
+    print("Введённый ключ (trimmed):", '"' .. userInput .. '"', "Длина:", #userInput)
+    if checkKey(userInput) then
+        print("Ключ принят!")
         ScreenGui:Destroy()
-        -- Тут вставь запуск своих скриптов:
-        -- loadstring(game:HttpGet("https://твоя-ссылка-на-скрипт.lua", true))()
+        -- Здесь вставь запуск своих скриптов, например:
+        -- loadstring(game:HttpGet("https://example.com/твой-скрипт.lua", true))()
     else
+        print("Неверный ключ!")
         ErrorLabel.Text = "❌ Неверный ключ. Получите его на Playerok (MILEDI STORE)"
     end
 end)
