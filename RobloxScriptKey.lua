@@ -1,13 +1,11 @@
+-- Ключ
 local correctKey = "Playerok MILEDI STORE"
 
 local function checkKey(input)
-    -- Убираем лишние пробелы по краям, сравниваем строго по содержимому и регистру
-    local trimmedInput = input:match("^%s*(.-)%s*$")
-    return trimmedInput == correctKey
+    return input == correctKey
 end
 
--- Создаем UI под стиль Playerok
-
+-- Создаем UI
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "PlayerokKeyUI"
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -76,11 +74,27 @@ ErrorLabel.BackgroundTransparency = 1
 ErrorLabel.TextXAlignment = Enum.TextXAlignment.Left
 ErrorLabel.Parent = Frame
 
+-- Проверка ключа и запуск двух скриптов
 Button.MouseButton1Click:Connect(function()
     if checkKey(Input.Text) then
         ScreenGui:Destroy()
-        -- Здесь запускаем твои скрипты:
-        -- loadstring(game:HttpGet("https://твоя-ссылка-на-скрипт.lua", true))()
+
+        -- Загружаем farmcoin
+        local success1, err1 = pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/spawnerscript/MurderMystery2/refs/heads/main/farmcoin.lua"))()
+        end)
+        if not success1 then
+            warn("Ошибка загрузки farmcoin: " .. tostring(err1))
+        end
+
+        -- Загружаем BeeconHub
+        local success2, err2 = pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/BaconBossScript/BeeconHub/main/BeeconHub"))()
+        end)
+        if not success2 then
+            warn("Ошибка загрузки BeeconHub: " .. tostring(err2))
+        end
+
     else
         ErrorLabel.Text = "❌ Неверный ключ. Получите его на Playerok (MILEDI STORE)"
     end
